@@ -120,7 +120,7 @@ var FCH = {
       small_up: ww > 767,
       medium_portrait: ww > 767 && ww < 960,
       medium: ww > 767 && ww < 1025,
-      large: ww > 1025
+      large: ww > 1024
     };
   },
 

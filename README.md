@@ -38,8 +38,8 @@ Available from `FCH.bp`. Returns boolean.
 |---|---|
 | small | window width less than or equal to 767 |
 | small_up | window width greater than or equal to 768 |
-| medium_portrait | window width between 767 and 960 |
-| medium_portrait | window width between 767 and 960 |
+| medium_portrait | window width between 768 and 960 |
+| medium | window width between 768 and 1024 |
 | large | window width greater than 1024 |
 
 ```javascript
@@ -107,7 +107,7 @@ FC._ui = {
     this.boo();
   }
 }
-// a scary alert is triggered everytime the window is resized
+// a scary alert is triggered every time the window is resized
 ```
 
 #### Default Values
