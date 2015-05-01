@@ -1,0 +1,262 @@
+/*globals FC */
+
+'use strict';
+
+var FCH = {
+
+  /* Listener Arrays */
+  resize: [],
+  scroll: [],
+  ready: [],
+  load: [],
+
+
+  /**
+  * @function init Start everything up
+  **/
+  init: function() {
+    // Children of root variable
+    this.kids = Object.keys(FC);
+
+    // IE detection
+    this.IE11 = this.isIE(11);
+    this.IE10 = this.isIE(10);
+    this.IE9 = this.isIE(9);
+    this.anyIE = (this.IE11 || this.IE10 || this.IE9);
+
+    this.breakpoints();
+
+    this.resize.push(this.breakpoints);
+    this.scroll.push(this.mobileFPS);
+
+    if(!this.anyIE) {
+      this._throttle("resize", "optimizedresize");
+      this._throttle("scroll", "optimizedscroll");
+    }
+
+    this._attachListeners();
+  },
+
+  /**
+  * @function setDefault Apply value to variable if it has none
+  * @param {var} variable - variable to set default to
+  * @param {anything} value - default value to attribute to variable
+  */
+  setDefault: function(variable, value){
+    return (typeof variable === 'undefined') ? value : variable;
+  },
+
+  /**
+  * @function smoothScroll Nice, unjanky scroll to element
+  * @param {jQuery object} target - scroll to the top of this object
+  * @param {optional integer} duration {2000} - how long the scroll lasts
+  * @param {optional integer} delay {100} - how long to wait after trigger
+  */
+  smoothScroll: function(target, duration, delay){
+    duration = this.setDefault(duration, 2000)
+    delay = this.setDefault(delay, 100)
+    var initSmooth = setTimeout(function(){
+      $('html,body').animate({
+        scrollTop: target.offset().top
+      }, duration);
+    }, delay)
+  },
+
+  /**
+  * @function localStore Store a string locally
+  * @param {string} key - accessible identifier
+  * @param {string} obj - value of identifier
+  */
+  localSet: function(key, obj) {
+    key = 'fineroadmap_' + key;
+    return localStorage[key] = JSON.stringify(obj);
+  },
+
+  /**
+  * @function localRetrive Retrieve localstorage object value
+  * @param {string} key - accessible identifier
+  */
+  localGet: function(key) {
+    key = 'fineroadmap_' + key;
+    if (typeof localStorage[key] !== 'undefined') {
+      return JSON.parse(localStorage[key]);
+    } else {
+      return false;
+    }
+  },
+
+  /**
+  * @function localClear Clear value of localstorage object. If no key is passed, clear all objects
+  * @param {optional string} key - accessible identifier
+  */
+  localClear: function(key){
+    return typeof key === 'undefined' ? localStorage.clear() : localStorage.removeItem(key)
+  },
+
+  /**
+  * @function ieIE check if IE is current browser
+  * @param {integer} version
+  */
+  isIE: function(version) {
+    return RegExp('msie' + (!isNaN(version)?('\\s' + version) : ''), 'i').test(navigator.userAgent);
+  },
+
+  /**
+  * @function breakpoints Provides accessible booleans for fluctuating screensizes
+  */
+  breakpoints: function() {
+    var ww, wh;
+
+    ww = window.innerWidth;
+    wh = window.innerHeight;
+
+    FCH.dimensions = {
+      ww: ww,
+      wh: wh
+    };
+
+    FCH.bp = {
+      small: ww < 768,
+      small_up: ww > 767,
+      medium_portrait: ww > 767 && ww < 960,
+      medium: ww > 767 && ww < 1025,
+      large: ww > 1025
+    };
+  },
+
+  /**
+  * @function hasClass Determine if element has class with vanilla JS
+  * @param {object} el
+  * @parma {string} cls
+  * @source http://jaketrent.com/post/addremove-classes-raw-javascript/
+  */
+  hasClass: function(el, cls) {
+    return !!el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+  },
+
+  /**
+  * @function addClass Add class to element with vanilla JS
+  * @param {object} el
+  * @parma {string} cls
+  * @source http://jaketrent.com/post/addremove-classes-raw-javascript/
+  */
+  addClass: function(el, cls) {
+    if (!this.hasClass(el, cls)) {
+      el.className += ' ' + cls;
+    }
+  },
+
+  /**
+  * @function removeClass Remove class from element with vanilla JS
+  * @param {object} el
+  * @parma {string} cls
+  * @source http://jaketrent.com/post/addremove-classes-raw-javascript/
+  */
+  removeClass: function(el, cls) {
+    if (this.hasClass(el, cls)) {
+      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+      el.className = el.className.replace(reg, ' ');
+    }
+  },
+
+  /**
+  * @function Increase screen performance and frames per second by diasbling pointer events on scroll
+  * @source http://www.thecssninja.com/css/pointer-events-60fps
+  */
+  mobileFPS: function(){
+    var scroll_timer,
+        body = document.getElementsByTagName('body')[0],
+        allowHover = function() {
+          return FCH.removeClass(body, 'u-disable_hover');
+        };
+
+    var FPSScroll = function() {
+      clearTimeout(scroll_timer),
+      FCH.hasClass(body, 'u-disable_hover') || FCH.addClass(body, 'u-disable_hover'),
+      scroll_timer = setTimeout(allowHover, 500 );
+    };
+
+    FCH.scroll.push(FPSScroll);
+  },
+
+
+  // Private
+
+  /**
+  * @function _applyListeners execute listeners using the bundled arrays
+  * @param {string} listener To hear for, i.e. scroll, resize
+  * @implied_param FC must be defined
+  */
+  _structListeners: function(listener) {
+    var children = this.kids;
+    for(var i = 0; i < children.length; i++) {
+      if( FC[children[i]].hasOwnProperty(listener) ) {
+        // Call or apply here?
+        FC[children[i]][listener]();
+      }
+    }
+
+    for(var x = 0; x < this[listener].length; x++) {
+      this[listener][x]();
+    }
+
+  },
+
+  /**
+  * @function _throttle fire events more efficiently
+  * @param {string} type Listener function to trump
+  * @param {string} name New name for listener
+  * @param {Object} obj Object to bind/watch (defaults to window)
+  * @source https://developer.mozilla.org/en-US/docs/Web/Events/scroll
+  */
+  _throttle: function(type, name, obj) {
+    var obj = obj || window;
+    var running = false;
+    var func = function() {
+      if (running) {
+        return;
+      }
+      running = true;
+      requestAnimationFrame(function() {
+        obj.dispatchEvent(new CustomEvent(name));
+        running = false;
+      });
+    };
+
+    obj.addEventListener(type, func);
+  },
+
+  /**
+  * @function _attachListeners actually bind the listeners to objects
+  * @param {boolean} optimized use the optimized listener (true by default)
+  */
+  _attachListeners: function(optimized) {
+    var _this = this;
+    var optimized = _this.setDefault(optimized, true);
+    var listener = optimized ? 'optimized' : '';
+
+    if(!_this.anyIE) {
+      listener = '';
+    }
+
+    window.addEventListener(listener + 'scroll', function() {
+      _this._structListeners('scroll')
+    });
+    window.addEventListener(listener + 'resize', function() {
+      _this._structListeners('resize')
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      _this._structListeners('ready')
+    });
+    window.addEventListener('onload', function() {
+      _this._structListeners('load')
+    });
+  },
+
+}
+
+/* Cached jQuery variables */
+if(typeof jQuery !== 'undefined') {
+  FCH.$body = jQuery('body');
+  FCH.$window = jQuery(window);
+}

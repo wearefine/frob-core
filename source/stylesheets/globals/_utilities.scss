@@ -1,0 +1,57 @@
+//===
+//Utility classes (single-purpose)
+//===
+.u {
+  &-pull {
+    &--center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    &--left {
+      float: left;
+    }
+    &--right {
+      float: right;
+    }
+  }
+  &-text {
+    &--center {
+      text-align: center;
+    }
+    &--left {
+      text-align: left;
+    }
+    &--right {
+      text-align: right;
+    }
+    &--italic {
+      font-style: italic;
+    }
+    &--uppercase {
+      text-transform: uppercase;
+    }
+  }
+  &-hidden {
+    display: none;
+  }
+  &-stop_scrolling {
+    overflow: hidden;
+    height: 100%;
+  }
+  &-nowrap {
+    white-space: nowrap;
+  }
+  &-break {
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+  //For use with "onScroll" JS function
+  &-disable_hover,
+  &-disable_hover * {
+    pointer-events: none !important;
+  }
+}
+
+.clearfix {
+  @include clearfix;
+}
