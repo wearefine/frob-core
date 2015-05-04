@@ -185,28 +185,7 @@ Quick shortcut for `&:hover { ... }` accepts color or block.
 }
 ```
 
-##### triangle
-
-Apply a CSS triangle.
-
-| Param | Accepts | Default |
-|---|---|---|
-| `$direction` | top, bottom, left, right | top |
-| `$color` | hex | `$c-black` |
-| `$size` | px | `30px` |
-| `$shadow` | boolean | `false` |
-
-##### clearfix
-
-Use a [Nicolas Gallagher](http://nicolasgallagher.com/micro-clearfix-hack/) clearfix. A `.clearfix` class is available in `_utilities.scss`
-
-```scss
-.cf {
-  @include clearfix;
-}
-```
-
-#### stack
+##### stack
 
 Make `z-index`'ing easy. Create an ordered list of your classes and call it inside your class.
 
@@ -266,6 +245,19 @@ $tweakpoints: (
 }
 ```
 
+##### triangle
+
+Apply a CSS triangle.
+
+| Param | Accepts | Default |
+|---|---|---|
+| `$direction` | top, bottom, left, right | top |
+| `$color` | hex | `$c-black` |
+| `$size` | px | `30px` |
+| `$shadow` | boolean | `false` |
+
+```
+
 ##### placeholder
 
 Pass a block to apply properties to input placeholder styles. Strongly recommended to be used only at root-level.
@@ -298,17 +290,16 @@ Target touch devices using [Modernizr](http://v3.modernizr.com/download/#-backgr
 }
 ```
 
-#### Functions
+##### clearfix
 
-##### negate
-
-Invert a number.
+Use a [Nicolas Gallagher](http://nicolasgallagher.com/micro-clearfix-hack/) clearfix. A `.clearfix` class is available in `_utilities.scss`
 
 ```scss
-.upside-down {
-  top: negate(10px);
+.cf {
+  @include clearfix;
 }
-```
+
+#### Functions
 
 ##### emCalc
 
@@ -345,5 +336,15 @@ $descriptions: (
     background: match($descriptions, 'big'); // 'blue'
     content: match($descriptions, 'wet'); // 'wide'
   }
+}
+```
+
+##### negate
+
+Invert a number.
+
+```scss
+.upside-down {
+  top: negate(10px);
 }
 ```
