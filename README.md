@@ -14,8 +14,6 @@ We're not at automatic testing yet, but you can pull this repo down, run `$ bund
 1. Apply the structure of `source/javascripts/application.js` to your project.
 1. Start Frob Core (usually in `application.js`): `;(function() { FCH.ready.push(FC.init); FCH.init(); })();`
 
-### Special Notes
-
 Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {...}`
 
 The subfunctions of `FC.init()` must be declared without `this`. This is to get around a `this` problem with how FC and FCH are called in `application.js`:
@@ -32,9 +30,7 @@ var FC = {
 
 Everything else, such as `FC._ui.init()`, can still use `this`.
 
-### API
-
-#### Breakpoints
+### Breakpoints
 
 Available from `FCH.bp`. Returns boolean.
 
@@ -52,7 +48,7 @@ if(FCH.bp.small) {
 }
 ```
 
-#### Dimensions
+### Dimensions
 
 Available from `FCH.dimensions`
 
@@ -61,7 +57,7 @@ Available from `FCH.dimensions`
 | ww | window width |
 | wh | window height |
 
-#### Cached jQuery Objects
+### Cached jQuery Objects
 
 Only available if jQuery is included.
 
@@ -70,7 +66,7 @@ Only available if jQuery is included.
 | `FCH.$body` | equivalent to `$('body')` |
 | `FCH.$window` | equivalent to `$(window)` |
 
-#### Hooks
+### Hooks
 
 Reserved functions on `FC` keys can be called automagically, avoiding declaring multiple event listeners on the `document` or `window`. For example,
 use the `resize` function to change the width of `.mydiv` to match the window's width.
@@ -114,7 +110,7 @@ FC._ui = {
 // a scary alert is triggered every time the window is resized
 ```
 
-#### Default Values
+### Default Values
 
 Add default values for missing values in functions, similar to Ruby's `variable ||= value`
 
@@ -124,7 +120,7 @@ function(required_value, missing_value) {
 }
 ```
 
-#### Local Storage
+### Local Storage
 
 Read, Update, and Destroy localStorage objects.
 
@@ -134,7 +130,7 @@ Read, Update, and Destroy localStorage objects.
 | `FCH.localSet(key, value)` | create or update key |
 | `FCH.localClear({optional} key)` | if key is provided, destroy just that key; otherwise destroy all keys |
 
-#### IE
+### IE
 
 Test for IE versions. Returns boolean. **Only use in the most trying of times. Agent strings are unreliable.**
 
@@ -149,9 +145,7 @@ Test for IE versions. Returns boolean. **Only use in the most trying of times. A
 
 1. Copy `source/stylesheets` to your project (usually replacing `app/assets/stylesheets`)
 
-### API
-
-#### Variables
+### Variables
 
 | Variable | Description |
 |---|---|
@@ -171,9 +165,9 @@ $f-opensans: 'Open Sans', $f-sans;
 $f-content: $f-opensans;
 ```
 
-#### Mixins
+### Mixins
 
-##### hover
+#### hover
 
 Quick shortcut for `&:hover { ... }` accepts color or block.
 
@@ -185,7 +179,7 @@ Quick shortcut for `&:hover { ... }` accepts color or block.
 }
 ```
 
-##### stack
+#### stack
 
 Make `z-index`ing easy. Create an ordered list of your classes and call it inside your class.
 
@@ -218,7 +212,7 @@ If you want to name your ordered list different from your classes, pass a key as
 }
 ```
 
-##### bp
+#### bp
 
 Put a block of content within a media breakpoint using the list defined in `_breakpoints.scss`. 
 
@@ -231,7 +225,7 @@ Put a block of content within a media breakpoint using the list defined in `_bre
 }
 ```
 
-##### tp
+#### tp
 
 Similar to `@include bp`, this mixin relies on `$tweakpoints`, which should be defined in your `_variables.scss`.
 
@@ -245,7 +239,7 @@ $tweakpoints: (
 }
 ```
 
-##### triangle
+#### triangle
 
 Apply a CSS triangle to an element.
 
@@ -262,7 +256,7 @@ Apply a CSS triangle to an element.
 }
 ```
 
-##### placeholder
+#### placeholder
 
 Pass a block to apply properties to input placeholder styles. Strongly recommended to be used only at root-level.
 
@@ -273,7 +267,7 @@ Pass a block to apply properties to input placeholder styles. Strongly recommend
 }
 ```
 
-##### ie
+#### ie
 
 Target specific Internet Explorer versions, and optionally pass in a version number. **Only use this mixin as a last resort. Feature detection is strongly preferred.** 
 
@@ -284,7 +278,7 @@ Target specific Internet Explorer versions, and optionally pass in a version num
 }
 ```
 
-##### touch
+#### touch
 
 Target touch devices using [Modernizr](http://v3.modernizr.com/download/#-backgroundcliptext-canvas-canvastext-cssfilters-cssgradients-csspositionsticky-cssremunit-csstransforms-csstransforms3d-csstransitions-cssvhunit-flexbox-flexboxlegacy-flexboxtweener-inlinesvg-localstorage-picture-preserve3d-srcset-svgclippaths-svgfilters-touchevents-cssclasses-dontmin).
 
@@ -294,7 +288,7 @@ Target touch devices using [Modernizr](http://v3.modernizr.com/download/#-backgr
 }
 ```
 
-##### clearfix
+#### clearfix
 
 Use a [Nicolas Gallagher](http://nicolasgallagher.com/micro-clearfix-hack/) clearfix. A `.clearfix` class is available in `_utilities.scss`
 
@@ -304,9 +298,9 @@ Use a [Nicolas Gallagher](http://nicolasgallagher.com/micro-clearfix-hack/) clea
 }
 ```
 
-#### Functions
+### Functions
 
-##### emCalc
+#### emCalc
 
 Convert `px` to `em`. Relies on `$em-base` in `_fine_variables.scss`, but this can be overwritten in your own `_variables.scss`
 
@@ -316,7 +310,7 @@ body {
 }
 ```
 
-##### remCalc
+#### remCalc
 
 Convert `px` to `rem`. Relies on `$em-base` in `_fine_variables.scss`, but this can be overwritten in your own `_variables.scss`
 
@@ -326,7 +320,7 @@ body {
 }
 ```
 
-##### match
+#### match
 
 Find pair of value or key in map. If value/key cannot be found, returns false
 
@@ -344,7 +338,7 @@ $descriptions: (
 }
 ```
 
-##### negate
+#### negate
 
 Invert a number.
 
