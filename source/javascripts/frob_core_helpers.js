@@ -235,7 +235,7 @@ var FCH = {
     var optimized = _this.setDefault(optimized, true);
     var listener = optimized ? 'optimized' : '';
 
-    if(!_this.anyIE) {
+    if(_this.anyIE) {
       listener = '';
     }
 

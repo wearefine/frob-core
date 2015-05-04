@@ -132,7 +132,7 @@ Read, Update, and Destroy localStorage objects.
 
 #### IE
 
-Unstable user navigation test for IE versions. Returns boolean. **For use only in trying times**
+Test for IE versions. Returns boolean. **Only use in the most trying of times. Agent strings are unreliable.**
 
 | Accessor | Description |
 |---|---|

@@ -11,10 +11,10 @@ $breakpoints: (
   'medium-portrait' : unquote('(max-width:959px) and (min-width:768px)'),
   'large'           : ( min-width: 1024px ),
   'large-down'      : ( max-width: 1024px ),
-  'large-up'        : ( min-width: 1024px ),1
+  'large-up'        : ( min-width: 1024px ),
   'print'           : ( only print ),
   'screen'          : ( only screen ),
   'retina'          : unquote('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)'),
   'portrait'        : unquote('only screen and (orientation: portrait)'),
-  'landscape'        : unquote('only screen and (orientation: landscape)'),
+  'landscape'       : unquote('only screen and (orientation: landscape)'),
 );

@@ -19,7 +19,7 @@
 }
 
 //Make a triangle (taken from Bourbon)
-@mixin triangle($direction:top, $color:$domColor, $size:30px, $shadow:false) {
+@mixin triangle($direction: top, $color: $c-black, $size: 30px, $shadow: false) {
   position: relative;
   background: $color;
   &:after {
@@ -29,7 +29,7 @@
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-color: rgba(250, 250, 250, 0);
+    border-color: rgba(#000, 0);
     border-width: $size;
     @if ($direction == top) {
       bottom: 100%;
@@ -65,7 +65,7 @@
       width: 0;
       position: absolute;
       pointer-events: none;
-      border-color: rgba(250, 250, 250, 0);
+      border-color: rgba(#000, 0);
       border-width: $size;
       z-index:2;
       @if ($direction == left) {

@@ -1,23 +1,24 @@
 
 // Modules
 @import
-  'modules/finescss/fine',
-  'modules/variables'
+  'globals/imports/finescss/fine',
+  'globals/imports/variables'
 ;
 
 // Globals
 @import
   'globals/tags',
-  'globals/utilities'
+  'globals/utilities',
+  'globals/typography'
 ;
 
 // Layout
 @import
-  'layouts/header',
-  'layouts/footer'
+  'globals/layouts/header',
+  'globals/layouts/footer'
 ;
 
-// Components
+// Blocks
 
 // Views
 
