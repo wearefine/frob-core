@@ -187,7 +187,7 @@ Quick shortcut for `&:hover { ... }` accepts color or block.
 
 ##### stack
 
-Make `z-index`'ing easy. Create an ordered list of your classes and call it inside your class.
+Make `z-index`ing easy. Create an ordered list of your classes and call it inside your class.
 
 ```scss
 $lightbox: (
@@ -247,7 +247,7 @@ $tweakpoints: (
 
 ##### triangle
 
-Apply a CSS triangle.
+Apply a CSS triangle to an element.
 
 | Param | Accepts | Default |
 |---|---|---|
@@ -256,6 +256,10 @@ Apply a CSS triangle.
 | `$size` | px | `30px` |
 | `$shadow` | boolean | `false` |
 
+```scss
+.nav-dropdown {
+  @include triangle(bottom, $c-white);
+}
 ```
 
 ##### placeholder
