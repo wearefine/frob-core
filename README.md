@@ -302,6 +302,7 @@ Use a [Nicolas Gallagher](http://nicolasgallagher.com/micro-clearfix-hack/) clea
 .cf {
   @include clearfix;
 }
+```
 
 #### Functions
 
