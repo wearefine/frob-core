@@ -27,7 +27,7 @@ var FCH = {
     this.breakpoints();
 
     this.resize.push(this.breakpoints);
-    this.scroll.push(this.mobileFPS);
+    this.mobileFPS();
 
     if(!this.anyIE) {
       this._throttle("resize", "optimizedresize");
@@ -166,17 +166,18 @@ var FCH = {
   mobileFPS: function(){
     var scroll_timer,
         body = document.getElementsByTagName('body')[0],
+        _this = this,
         allowHover = function() {
-          return FCH.removeClass(body, 'u-disable_hover');
+          return _this.removeClass(body, 'u-disable_hover');
         };
 
     var FPSScroll = function() {
       clearTimeout(scroll_timer),
-      FCH.hasClass(body, 'u-disable_hover') || FCH.addClass(body, 'u-disable_hover'),
+      _this.hasClass(body, 'u-disable_hover') || _this.addClass(body, 'u-disable_hover'),
       scroll_timer = setTimeout(allowHover, 500 );
     };
 
-    FCH.scroll.push(FPSScroll);
+    _this.scroll.push(FPSScroll);
   },
 
 
