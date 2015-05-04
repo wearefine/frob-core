@@ -78,7 +78,7 @@ use the `resize` function to change the width of `.mydiv` to match the window's 
 ```javascript
 FC._ui = {
   resize: function() {
-    $('.mydiv').width(FCH.ww);
+    $('.mydiv').width(FCH.dimensions.ww);
   }
 };
 ```
