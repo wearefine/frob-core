@@ -88,7 +88,7 @@
 }
 
 //Clearfix
-@mixin clearfix() {
+@mixin clearfix {
   &:before,
   &:after {
     content: ' ';
@@ -107,8 +107,8 @@
   }
 }
 
-//Z-index function: comma-separated list and item taken
-//http://www.smashingmagazine.com/2014/06/12/sassy-z-index-management-for-complex-layouts/
+// Z-index function: comma-separated list and item taken
+// http://www.smashingmagazine.com/2014/06/12/sassy-z-index-management-for-complex-layouts/
 @function z($list, $element) {
   $z-index: index($list, $element);
 
@@ -120,7 +120,7 @@
   @return null;
 }
 
-//Throw it your list of css classes without periods and it'll return a z-index or nothing at all if the parent selector is not in the list
+// Throw it your list of css classes without periods and it'll return a z-index or nothing at all if the parent selector is not in the list
 @mixin stack($list, $element:false) {
   $z: false;
   @if $element {
@@ -147,7 +147,8 @@
   @return $pxWidth / $em-base * 1rem;
 }
 
-/* Helper for finding value in a faux sass hash -- i.e. a list */
+// Helper for finding value in a faux sass hash -- i.e. a list
+// http://hugogiraudel.com/2013/08/12/sass-functions/
 @function match($collection, $value) {
   @each $item in $collection {
     $index: index($item, $value);
@@ -160,6 +161,7 @@
 }
 
 // Media Query Fun
+// http://www.sitepoint.com/managing-responsive-breakpoints-sass/
 @mixin bp($name, $breakpoint_list: $breakpoints) {
   // If the key exists in the map
   @if map-has-key($breakpoint_list, $name) {
@@ -226,18 +228,13 @@ $placeholders: '-webkit-input-placeholder',
 }
 
 //Touch and mobile
-@mixin touch($mobile_too: true) {
+@mixin touch {
   @if & {
     .touch & {
       @content;
     }
   } @else {
     .touch {
-      @content;
-    }
-  }
-  @if $mobile_too {
-    @include bp($bear--baby) {
       @content;
     }
   }
