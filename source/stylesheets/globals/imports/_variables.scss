@@ -1,3 +1,9 @@
+// Project Specific breakpoints
+$breakpoints: ();
+
+// Merge $fine_breakpoints and $breakpoints to use with bp() mixin
+$breakpoints: map-merge($fine_breakpoints, $breakpoints);
+
 //Default colors (doesn't really need to be changed)
 $c-gray: #777;
 $c-lightest_gray: #f3f3f3;

@@ -1,3 +1,25 @@
+// FINE Standard Breakpoints
+$fine_breakpoints: (
+  'micro'           : ( max-width:  420px ),
+  'micro-down'      : ( max-width:  420px ),
+  'micro-up'        : ( min-width:  420px ),
+  'small'           : ( max-width:  767px ),
+  'small-down'      : ( max-width:  767px ),
+  'small-up'        : ( min-width:  768px ),
+  'medium'          : unquote('(max-width: 1024px) and (min-width: 768px)'),
+  'medium-down'     : ( max-width: 1024px ),
+  'medium-up'       : ( min-width: 1024px ),
+  'medium-portrait' : unquote('(max-width:959px) and (min-width:768px)'),
+  'large'           : ( min-width: 1024px ),
+  'large-down'      : ( max-width: 1024px ),
+  'large-up'        : ( min-width: 1024px ),
+  'print'           : ( only print ),
+  'screen'          : ( only screen ),
+  'retina'          : unquote('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)'),
+  'portrait'        : unquote('only screen and (orientation: portrait)'),
+  'landscape'       : unquote('only screen and (orientation: landscape)'),
+);
+
 $em-base: 16px !default;
 
 $f-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
