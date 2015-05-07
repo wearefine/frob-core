@@ -1,6 +1,6 @@
 // scss-lint:disable VendorPrefixes
 
-//Shortcut for text color of hover action
+// Shortcut for text color of hover action
 @mixin hover($color: false) {
   &:hover {
     @if $color {
@@ -11,17 +11,18 @@
   }
 }
 
-//Remove all list properties
+// Remove all list properties
 @mixin list--none {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-//Make a triangle (taken from Bourbon)
+// Make a triangle (taken from Bourbon)
 @mixin triangle($direction: top, $color: $c-black, $size: 30px, $shadow: false) {
   position: relative;
   background: $color;
+
   &:after {
     border: solid transparent;
     content: ' ';
@@ -31,32 +32,37 @@
     pointer-events: none;
     border-color: rgba(#000, 0);
     border-width: $size;
+
     @if ($direction == top) {
       bottom: 100%;
       left: 7%;
       margin-left: $size;
       border-bottom-color: $color;
     }
+
     @if ($direction == bottom) {
       top: 100%;
       left: 0;
       border-top-color: $color;
-      border-width:$size $size 0 0;
+      border-width: $size $size 0 0;
     }
+
     @if ($direction == left) {
       top: 20%;
       left: 0;
       margin-left: -$size * 2;
       border-right-color: $color;
     }
+
     @if ($direction == right) {
       top: 20%;
-      left:auto;
+      left: auto;
       right: 0;
       margin-right: -$size * 2;
       border-left-color: $color;
     }
   }
+
   @if ($shadow) {
     &:before {
       border: solid transparent;
@@ -67,13 +73,15 @@
       pointer-events: none;
       border-color: rgba(#000, 0);
       border-width: $size;
-      z-index:2;
+      z-index: 2;
+
       @if ($direction == left) {
         top: 20%;
         left: 0;
         margin-left: -(($size * 2) + 1);
         border-right-color: $shadow;
       }
+
       @if ($direction == top) {
         bottom: 100%;
         left: 7%;
@@ -81,25 +89,28 @@
         border-bottom-color: $shadow;
       }
     }
+
     &:after {
-      z-index:3;
+      z-index: 3;
     }
   }
 }
 
-//Clearfix
+// Clearfix
 @mixin clearfix {
   &:before,
   &:after {
     content: ' ';
     display: table;
   }
+
   &:after {
     clear: both;
   }
 }
 
-@function negate($ineger) {
+// Return a negative integer of the supplied value
+@function negate($integer) {
   @if $integer > 0 {
     @return 0 - $integer;
   } @else {
@@ -123,6 +134,7 @@
 // Throw it your list of css classes without periods and it'll return a z-index or nothing at all if the parent selector is not in the list
 @mixin stack($list, $element:false) {
   $z: false;
+
   @if $element {
     $z: z($list, $element);
   } @else {
@@ -131,15 +143,16 @@
     $element: nth($parents, $target);
     $z: z($list, str_slice(inspect($element), 2));
   }
+
   @if $z {
     z-index:$z;
   }
 }
 
 
-//Taken
-//from
-//Foundation
+// Taken
+// from
+// Foundation
 @function emCalc($pxWidth) {
   @return $pxWidth / $em-base * 1em;
 }
@@ -177,9 +190,9 @@
   }
 }
 
-//Taken
-//from
-//Bourbon
+// Taken
+// from
+// Bourbon
 $placeholders: '-webkit-input-placeholder',
                '-moz-placeholder',
                '-ms-input-placeholder';
@@ -207,7 +220,7 @@ $placeholders: '-webkit-input-placeholder',
   }
 }
 
-//IE
+// IE
 @mixin ie($version: '') {
   @if & {
     .ie#{unquote($version)} & {
@@ -220,7 +233,7 @@ $placeholders: '-webkit-input-placeholder',
   }
 }
 
-//Touch and mobile
+// Touch and mobile
 @mixin touch {
   @if & {
     .touch & {
