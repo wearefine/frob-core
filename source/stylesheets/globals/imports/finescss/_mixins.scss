@@ -177,13 +177,6 @@
   }
 }
 
-// Tweakpoints
-@mixin tp($name) {
-  @include bp($name, $tweakpoints) {
-    @content;
-  }
-}
-
 //Taken
 //from
 //Bourbon

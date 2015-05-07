@@ -225,20 +225,6 @@ Put a block of content within a media breakpoint using the list defined in `_bre
 }
 ```
 
-#### tp
-
-Similar to `@include bp`, this mixin relies on `$tweakpoints`, which should be defined in your `_variables.scss`.
-
-```scss
-$tweakpoints: (
-  'mbp-and-up'      : ( min-width:  1440px ),
-);
-
-@include tp(mbp-and-up) {
-  content: 'This is bigger than 1440px';
-}
-```
-
 #### triangle
 
 Apply a CSS triangle to an element.
