@@ -190,33 +190,42 @@
   }
 }
 
-// Taken
-// from
-// Bourbon
-$placeholders: '-webkit-input-placeholder',
-               '-moz-placeholder',
-               '-ms-input-placeholder';
-
+// Style placeholder text at the root level or on an element
 @mixin placeholder {
-  @each $placeholder in $placeholders {
-    @if $placeholder == '-webkit-input-placeholder' {
-      &::#{$placeholder} {
-        @content;
-      }
-    } @else if $placeholder == '-moz-placeholder' {
-      // FF 18-
-      &:#{$placeholder} {
-        @content;
-      }
-      // FF 19+
-      &::#{$placeholder} {
-        @content;
-      }
-    } @else {
-      &:#{$placeholder} {
-        @content;
-      }
+
+  @if & {
+
+    &::-webkit-input-placeholder {
+      @content;
     }
+
+    &:-moz-placeholder {
+      @content;
+    }
+
+    ::-moz-placeholder {
+      @content;
+    }
+
+    &:-ms-input-placeholder {
+      @content;
+    }
+
+  } @else {
+
+    input[placeholder],
+    textarea[placeholder] {
+      @content;
+    }
+
+    ::-moz-placeholder {
+      @content;
+    }
+
+    ::-webkit-input-placeholder {
+      @content;
+    }
+
   }
 }
 

@@ -127,7 +127,7 @@ var FCH = {
   /**
   * @function hasClass Determine if element has class with vanilla JS
   * @param {object} el
-  * @parma {string} cls
+  * @param {string} cls
   * @source http://jaketrent.com/post/addremove-classes-raw-javascript/
   */
   hasClass: function(el, cls) {
@@ -137,7 +137,7 @@ var FCH = {
   /**
   * @function addClass Add class to element with vanilla JS
   * @param {object} el
-  * @parma {string} cls
+  * @param {string} cls
   * @source http://jaketrent.com/post/addremove-classes-raw-javascript/
   */
   addClass: function(el, cls) {
@@ -149,7 +149,7 @@ var FCH = {
   /**
   * @function removeClass Remove class from element with vanilla JS
   * @param {object} el
-  * @parma {string} cls
+  * @param {string} cls
   * @source http://jaketrent.com/post/addremove-classes-raw-javascript/
   */
   removeClass: function(el, cls) {
@@ -254,7 +254,7 @@ var FCH = {
     });
   },
 
-}
+};
 
 /* Cached jQuery variables */
 if(typeof jQuery !== 'undefined') {
