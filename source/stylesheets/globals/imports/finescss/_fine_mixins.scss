@@ -199,10 +199,6 @@
       @content;
     }
 
-    &:-moz-placeholder {
-      @content;
-    }
-
     &::-moz-placeholder {
       @content;
     }
@@ -219,6 +215,10 @@
     }
 
     ::-moz-placeholder {
+      @content;
+    }
+
+    :-moz-placeholder {
       @content;
     }
 
