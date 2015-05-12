@@ -226,6 +226,10 @@
       @content;
     }
 
+    :-ms-input-placeholder {
+      @content;
+    }
+
   }
 }
 
