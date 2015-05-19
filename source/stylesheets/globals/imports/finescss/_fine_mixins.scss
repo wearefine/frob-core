@@ -18,38 +18,41 @@
   list-style: none;
 }
 
+// eager.io/blog/smarter-link-underlines/
+// Rewritten in SCSS from Stylus
 // Create iOS style text underlines
 // Comes in one mixin containing two additional mixins
 // each nested mixin depends on function/keyframe helper
-  // | underline-link
-    // |- underline-link-shadow
-    //  |- function: skew-it
-    // |- underline-transition
-    //  |- keyframe: underline-width
 // @include underline-link(white, black);
 // @include underline-link(white, black, false);
 
 @mixin underline-link-shadow($color) {
   text-shadow:
-  skew-it(1) 0 $color, skew-it(-1) 0 $color,
-  0 skew-it(1) $color, 0 skew-it(-1) $color,
-  skew-it(2) 0 $color, skew-it(-2) 0 $color,
-  skew-it(3) 0 $color, skew-it(-3) 0 $color,
-  skew-it(4) 0 $color, skew-it(-4) 0 $color,
-  skew-it(5) 0 $color, skew-it(-5) 0 $color;
+    skew-it(1) 0 $color,
+    skew-it(-1) 0 $color,
+    0 skew-it(1) $color,
+    0 skew-it(-1) $color,
+    skew-it(2) 0 $color,
+    skew-it(-2) 0 $color,
+    skew-it(3) 0 $color,
+    skew-it(-3) 0 $color,
+    skew-it(4) 0 $color,
+    skew-it(-4) 0 $color,
+    skew-it(5) 0 $color,
+    skew-it(-5) 0 $color;
 }
   @function skew-it($iteration) {
     @return ($iteration * 0.03) * 1em;
   }
 
 @mixin underline-link($background-color, $color, $transition: true) {
+  @include underline-link-shadow($background-color);
   background-image: linear-gradient($background-color, $background-color), linear-gradient($background-color, $background-color), linear-gradient($color, $color);
   background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
   background-repeat: no-repeat, no-repeat, repeat-x;
   background-position: 0% 90%, 100% 90%, 0% 90%;
   color: $color;
   text-decoration: none;
-  @include underline-link-shadow($background-color);
 
   @if $transition == true {
     @include underline-transition($background-color);
@@ -65,7 +68,11 @@
     background: $background-color;
   }
 
-  &:before, &:after, *, *:before, *:after {
+  &:before,
+  &:after,
+  *,
+  *:before,
+  *:after {
     text-shadow: none
   }
 
@@ -78,7 +85,8 @@
   position:relative;
   display:inline-block;
   z-index: 1;
-  &:before, &:after {
+  &:before,
+  &:after {
     content: '';
     position: absolute;
     width: 50%;
@@ -97,7 +105,8 @@
   }
 
   &:hover {
-    &:before, &:after {
+    &:before,
+    &:after {
       animation: underline-width 200ms cubic-bezier(.01,.99,.9,1) forwards;
     }
   }
