@@ -15,8 +15,6 @@ var FCH = {
   * @function init Start everything up
   **/
   init: function() {
-    // Children of root variable
-    this.kids = Object.keys(FC);
 
     // IE detection
     this.IE11 = this.isIE(11);
@@ -32,6 +30,11 @@ var FCH = {
     if(!this.anyIE) {
       this._throttle("resize", "optimizedresize");
       this._throttle("scroll", "optimizedscroll");
+    }
+
+    var listeners = ['resize', 'scroll', 'ready', 'load'];
+    for(var i = 0; i < listeners.length; i++) {
+      this._attachChildListeners( listeners[i] );
     }
 
     this._attachListeners();
@@ -184,21 +187,33 @@ var FCH = {
   // Private
 
   /**
-  * @function _applyListeners execute listeners using the bundled arrays
-  * @param {string} listener To hear for, i.e. scroll, resize
-  * @implied_param FC must be defined
+  * @function _attachChildListeners Attach hooks on child objects to the listener arrays
+  * @param {string} listener
   */
-  _structListeners: function(listener) {
-    var children = this.kids;
-    for(var i = 0; i < children.length; i++) {
-      if( FC[children[i]].hasOwnProperty(listener) ) {
-        // Call or apply here?
-        FC[children[i]][listener]();
+  _attachChildListeners: function(listener) {
+    var kids = Object.keys(FC);
+
+    for(var i = 0; i < kids.length; i++) {
+      var child = FC[kids[i]]
+      if( child.hasOwnProperty(listener) ) {
+        var child_func = child[listener];
+        child_func.prototype = child
+        FCH[listener].push( child_func );
       }
     }
 
-    for(var x = 0; x < this[listener].length; x++) {
-      this[listener][x]();
+  },
+
+  /**
+  * @function _callListener Execute listeners using the bundled arrays
+  * @param {string} listener What to hear for, i.e. scroll, resize
+  * @implied_param FC must be defined
+  */
+  _callListener: function(listener) {
+    var listener_array = this[listener];
+
+    for(var x = 0; x < listener_array.length; x++) {
+      listener_array[x].call( listener_array[x].prototype )
     }
 
   },
@@ -241,20 +256,20 @@ var FCH = {
     }
 
     window.addEventListener(listener + 'scroll', function() {
-      _this._structListeners('scroll')
+      _this._callListener('scroll')
     });
     window.addEventListener(listener + 'resize', function() {
-      _this._structListeners('resize')
+      _this._callListener('resize')
     });
     document.addEventListener('DOMContentLoaded', function() {
-      _this._structListeners('ready')
+      _this._callListener('ready')
     });
-    window.addEventListener('onload', function() {
-      _this._structListeners('load')
+    window.addEventListener('load', function() {
+      _this._callListener('load')
     });
   },
 
-};
+}
 
 /* Cached jQuery variables */
 if(typeof jQuery !== 'undefined') {
