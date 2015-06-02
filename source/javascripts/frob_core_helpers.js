@@ -145,6 +145,7 @@ var FCH = {
   */
   addClass: function(el, cls) {
     if (!this.hasClass(el, cls)) {
+      el.className = el.className.trim();
       el.className += ' ' + cls;
     }
   },
@@ -275,4 +276,5 @@ var FCH = {
 if(typeof jQuery !== 'undefined') {
   FCH.$body = jQuery('body');
   FCH.$window = jQuery(window);
+  FCH.$document = jQuery(document);
 }
