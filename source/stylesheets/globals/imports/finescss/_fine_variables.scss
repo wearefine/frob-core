@@ -1,13 +1,13 @@
 // FINE Standard Breakpoints
 $fine_breakpoints: (
   'small'           : ( min-width:  420px ),
-  'small-down'      : ( max-width:  419px ),
+  'small-down'      : ( max-width:  420px ),
   'medium'          : ( min-width:  768px ),
-  'medium-down'     : ( max-width:  767px ),
-  'medium-only'     : unquote('(min-width: 768px) and (max-width: 1023px)'),
+  'medium-down'     : ( max-width:  768px ),
+  'medium-only'     : unquote('(min-width: 768px) and (max-width: 1024px)'),
   'medium-portrait' : unquote('(min-width: 768px) and (max-width: 959px)'),
   'large'           : ( min-width: 1024px ),
-  'large-down'      : ( max-width: 1023px ),
+  'large-down'      : ( max-width: 1024px ),
   'print'           : ( only print ),
   'screen'          : ( only screen ),
   'retina'          : unquote('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)'),
