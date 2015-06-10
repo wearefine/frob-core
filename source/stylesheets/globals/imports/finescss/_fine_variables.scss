@@ -1,5 +1,5 @@
 // FINE Standard Breakpoints
-$fine_breakpoints: (
+$fine-breakpoints: (
   'small'           : ( min-width:  420px ),
   'small-down'      : ( max-width:  420px ),
   'medium'          : ( min-width:  768px ),
@@ -24,7 +24,7 @@ $f-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $f-serif: Georgia, serif;
 $f-script: Brush Script MT, Trebuchet MS, 'Helvetica Neue', Helvetica, Arial, script;
 $f-monospace: 'Bitstream Vera Sans Mono', Consolas, Monaco, Menlo, 'Andale Mono', monospace;
-$f-international: "Microsoft YaHei New","Microsoft Yahei","微软雅黑",宋体,SimSun,STXihei,"华文细黑","MS PGothic", $f-sans;
+$f-international: 'Microsoft YaHei New', 'Microsoft Yahei', '微软雅黑', 宋体, SimSun, STXihei, '华文细黑', 'MS PGothic', $f-sans;
 
 $c-white: #fff;
 $c-black: #000;

@@ -30,7 +30,7 @@
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-color: rgba(#000, 0);
+    border-color: rgba($c-black, 0);
     border-width: $size;
 
     @if ($direction == top) {
@@ -71,7 +71,7 @@
       width: 0;
       position: absolute;
       pointer-events: none;
-      border-color: rgba(#000, 0);
+      border-color: rgba($c-black, 0);
       border-width: $size;
       z-index: 2;
 
@@ -108,6 +108,7 @@
     clear: both;
   }
 }
+
 
 // Return a negative integer of the supplied value
 @function negate($integer) {
@@ -182,11 +183,10 @@
     @media #{inspect(map-get($breakpoint_list, $name))} {
       @content;
     }
-  }
-  // If the key doesn't exist in the map
-  @else {
-    @warn "Unfortunately, no value with #{$name} could be retrieved from `$breakpoint`. "
-        + "Please make sure it is defined in `$breakpoints` map.";
+  } @else {
+    // If the key doesn't exist in the map
+    @warn 'Unfortunately, no value with #{$name} could be retrieved from `$breakpoint`. '
+        + 'Please make sure it is defined in `$breakpoints` map.';
   }
 }
 
@@ -209,6 +209,7 @@
 
   } @else {
 
+    // scss-lint:disable QualifyingElement
     input[placeholder],
     textarea[placeholder] {
       @content;
@@ -257,4 +258,19 @@
       @content;
     }
   }
+}
+
+// Include the icomoon font properties
+@mixin icomoon {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  // Better Font Rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
