@@ -56,13 +56,14 @@ var FCH = {
   * @param {optional integer} delay {100} - how long to wait after trigger
   */
   smoothScroll: function(target, duration, delay){
-    duration = this.setDefault(duration, 2000)
-    delay = this.setDefault(delay, 100)
-    var initSmooth = setTimeout(function(){
+    duration = this.setDefault(duration, 2000);
+    delay = this.setDefault(delay, 100);
+
+    setTimeout(function(){
       $('html,body').animate({
         scrollTop: target.offset().top
       }, duration);
-    }, delay)
+    }, delay);
   },
 
   /**
@@ -71,8 +72,10 @@ var FCH = {
   * @param {string} obj - value of identifier
   */
   localSet: function(key, obj) {
-    key = 'fineroadmap_' + key;
-    return localStorage[key] = JSON.stringify(obj);
+    var value = JSON.stringify(obj);
+    localStorage[key] = JSON.stringify(obj);
+
+    return value;
   },
 
   /**
@@ -80,7 +83,6 @@ var FCH = {
   * @param {string} key - accessible identifier
   */
   localGet: function(key) {
-    key = 'fineroadmap_' + key;
     if (typeof localStorage[key] !== 'undefined') {
       return JSON.parse(localStorage[key]);
     } else {
@@ -93,7 +95,7 @@ var FCH = {
   * @param {optional string} key - accessible identifier
   */
   localClear: function(key){
-    return typeof key === 'undefined' ? localStorage.clear() : localStorage.removeItem(key)
+    return typeof key === 'undefined' ? localStorage.clear() : localStorage.removeItem(key);
   },
 
   /**
@@ -101,7 +103,8 @@ var FCH = {
   * @param {integer} version
   */
   isIE: function(version) {
-    return RegExp('msie' + (!isNaN(version)?('\\s' + version) : ''), 'i').test(navigator.userAgent);
+    var regex = new RegExp('msie' + (!isNaN(version)?('\\s' + version) : ''), 'i');
+    return regex.test(navigator.userAgent);
   },
 
   /**
@@ -195,10 +198,10 @@ var FCH = {
     var kids = Object.keys(FC);
 
     for(var i = 0; i < kids.length; i++) {
-      var child = FC[kids[i]]
+      var child = FC[kids[i]];
       if( child.hasOwnProperty(listener) ) {
         var child_func = child[listener];
-        child_func.prototype = child
+        child_func.prototype = child;
         FCH[listener].push( child_func );
       }
     }
@@ -214,7 +217,7 @@ var FCH = {
     var listener_array = this[listener];
 
     for(var x = 0; x < listener_array.length; x++) {
-      listener_array[x].call( listener_array[x].prototype )
+      listener_array[x].call( listener_array[x].prototype );
     }
 
   },
@@ -227,7 +230,7 @@ var FCH = {
   * @source https://developer.mozilla.org/en-US/docs/Web/Events/scroll
   */
   _throttle: function(type, name, obj) {
-    var obj = obj || window;
+    obj = obj || window;
     var running = false;
     var func = function() {
       if (running) {
@@ -249,7 +252,7 @@ var FCH = {
   */
   _attachListeners: function(optimized) {
     var _this = this;
-    var optimized = _this.setDefault(optimized, true);
+    optimized = _this.setDefault(optimized, true);
     var listener = optimized ? 'optimized' : '';
 
     if(_this.anyIE) {
@@ -257,20 +260,20 @@ var FCH = {
     }
 
     window.addEventListener(listener + 'scroll', function() {
-      _this._callListener('scroll')
+      _this._callListener('scroll');
     });
     window.addEventListener(listener + 'resize', function() {
-      _this._callListener('resize')
+      _this._callListener('resize');
     });
     document.addEventListener('DOMContentLoaded', function() {
-      _this._callListener('ready')
+      _this._callListener('ready');
     });
     window.addEventListener('load', function() {
-      _this._callListener('load')
+      _this._callListener('load');
     });
   },
 
-}
+};
 
 /* Cached jQuery variables */
 if(typeof jQuery !== 'undefined') {
