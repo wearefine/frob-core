@@ -54,14 +54,16 @@ var FCH = {
   * @param {jQuery object} target - scroll to the top of this object
   * @param {optional integer} duration {2000} - how long the scroll lasts
   * @param {optional integer} delay {100} - how long to wait after trigger
+  * @param {optional integer} offset {0} - additional offset to add to the scrollTop
   */
-  smoothScroll: function(target, duration, delay){
+  smoothScroll: function(target, duration, delay, offset){
     duration = this.setDefault(duration, 2000);
     delay = this.setDefault(delay, 100);
+    offset = this.setDefault(offset, 0);
 
     setTimeout(function(){
       $('html,body').animate({
-        scrollTop: target.offset().top
+        scrollTop: target.offset().top + offset
       }, duration);
     }, delay);
   },
