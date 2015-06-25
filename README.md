@@ -130,6 +130,16 @@ Read, Update, and Destroy localStorage objects.
 | `FCH.localSet(key, value)` | create or update key |
 | `FCH.localClear({optional} key)` | if key is provided, destroy just that key; otherwise destroy all keys |
 
+### Existence
+
+Check to see if an element exists on the page
+
+```javascript
+// <div class="henry"></div>
+
+FCH.exists('.henry') // => true
+```
+
 ### IE
 
 Test for IE versions. Returns boolean. **Only use in the most trying of times. Agent strings are unreliable.**

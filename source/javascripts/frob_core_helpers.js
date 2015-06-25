@@ -108,6 +108,14 @@ var FCH = {
   },
 
   /**
+  * @function exists check for existence of element on page
+  * @param {object} query - JavaScript object
+  */
+  exists: function(query) {
+    return !!document.querySelector(query);
+  },
+
+  /**
   * @function breakpoints Provides accessible booleans for fluctuating screensizes
   */
   breakpoints: function() {
