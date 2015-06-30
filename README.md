@@ -146,7 +146,6 @@ Test for IE versions. Returns boolean. **Only use in the most trying of times. A
 
 | Accessor | Description |
 |---|---|
-| `FCH.IE11` | true if browser is IE11 |
 | `FCH.IE10` | true if browser is IE10 |
 | `FCH.IE9` | true if browser is IE9 |
 | `FCH.anyIE` | true if browser is Internet Explorer |
