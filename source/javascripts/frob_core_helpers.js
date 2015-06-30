@@ -27,11 +27,6 @@ var FCH = {
     this.resize.push(this.breakpoints);
     this.mobileFPS();
 
-    if(!this.anyIE) {
-      this._throttle("resize", "optimizedresize");
-      this._throttle("scroll", "optimizedscroll");
-    }
-
     var listeners = ['resize', 'scroll', 'ready', 'load'];
     for(var i = 0; i < listeners.length; i++) {
       this._attachChildListeners( listeners[i] );
@@ -258,14 +253,16 @@ var FCH = {
 
   /**
   * @function _attachListeners actually bind the listeners to objects
-  * @param {boolean} optimized use the optimized listener (true by default)
   */
-  _attachListeners: function(optimized) {
+  _attachListeners: function() {
     var _this = this;
-    optimized = _this.setDefault(optimized, true);
-    var listener = optimized ? 'optimized' : '';
+    var listener = 'optimized';
 
-    if(_this.anyIE) {
+    // Optimized fires a more effective listener but the method isn't supported in all browsers
+    if(typeof CustomEvent === 'function') {
+      _this._throttle('resize', 'optimizedresize');
+      _this._throttle('scroll', 'optimizedscroll');
+    } else {
       listener = '';
     }
 
