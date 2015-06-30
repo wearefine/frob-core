@@ -17,10 +17,9 @@ var FCH = {
   init: function() {
 
     // IE detection
-    this.IE11 = this.isIE(11);
     this.IE10 = this.isIE(10);
     this.IE9 = this.isIE(9);
-    this.anyIE = (this.IE11 || this.IE10 || this.IE9);
+    this.anyIE = (this.IE10 || this.IE9);
 
     this.breakpoints();
 
