@@ -24,7 +24,7 @@ var FCH = {
     this.breakpoints();
 
     this.resize.push(this.breakpoints);
-    this.mobileFPS();
+    this.ready.push(this.mobileFPS);
 
     var listeners = ['resize', 'scroll', 'ready', 'load'];
     for(var i = 0; i < listeners.length; i++) {
@@ -177,7 +177,7 @@ var FCH = {
   mobileFPS: function(){
     var scroll_timer,
         body = document.getElementsByTagName('body')[0],
-        _this = this,
+        _this = FCH,
         allowHover = function() {
           return _this.removeClass(body, 'u-disable_hover');
         };
