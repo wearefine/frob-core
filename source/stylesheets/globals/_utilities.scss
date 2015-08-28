@@ -48,7 +48,10 @@
   //For use with "onScroll" JS function
   &-disable_hover,
   &-disable_hover * {
-    pointer-events: none !important;
+    @include bp(small-down) {
+      // scss-lint:disable ImportantRule
+      pointer-events: none !important;
+    }
   }
 }
 
