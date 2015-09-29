@@ -14,7 +14,7 @@ We're not at automatic testing yet, but you can pull this repo down, run `$ bund
 1. Apply the structure of `source/javascripts/application.js` to your project.
 1. Start Frob Core (usually in `application.js`): `;(function() { FCH.ready.push(FC.init); FCH.init(); })();`
 
-Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {...}`
+Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {...}`. If it doesn't, the core holder must be passed in `FCH.init`, i.e. `FCH.init(notFCButStillAJavaScriptObject)`.
 
 The subfunctions of `FC.init()` must be declared without `this`. This is to get around a `this` problem with how FC and FCH are called in `application.js`:
 
