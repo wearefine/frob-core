@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Frob core helpers
  * @namespace
@@ -26,9 +24,13 @@ var FCH = {
    *   }
    * }
    * FCH.init(FC);
+   * @todo Return to how FC is defined by default and reenable 'use strict';
    */
   init: function(jsHolder) {
-    var FC = this.setDefault(FC, {});
+    if (typeof FC === 'undefined') {
+      FC = {};
+    }
+
     jsHolder = this.setDefault(jsHolder, FC);
 
     // IE detection
