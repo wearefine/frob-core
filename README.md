@@ -294,6 +294,16 @@ Use a [Nicolas Gallagher](http://nicolasgallagher.com/micro-clearfix-hack/) clea
 }
 ```
 
+#### vertical-center
+
+[Vertically align](http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/) an object without `vertical-align`.
+
+```scss
+.center-between {
+  @include vertical-center;
+}
+```
+
 ### Functions
 
 #### emCalc

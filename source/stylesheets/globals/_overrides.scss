@@ -14,7 +14,7 @@
 }
 
 //Tablet (landscape and down)
-@include bp(medium) {
+@include bp(large-down) {
   .hide--medium.hide--medium,
   .hide--large-down.hide--large-down,
   .hide--small-up.hide--small-up,
@@ -31,7 +31,7 @@
 }
 
 //Mobile
-@include bp(small) {
+@include bp(medium-down) {
   .hide--small.hide--small,
   .hide--large-down.hide--large-down,
   .hide--medium-down.hide--medium-down,
