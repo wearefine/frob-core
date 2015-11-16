@@ -318,7 +318,7 @@ var FCH = {
      * @private
      * @param {String} listener - What to hear for, i.e. scroll, resize
      */
-    var callListener = function(listener) {
+    function callListener(listener) {
       var listener_array = _this[listener];
 
       for(var x = 0; x < listener_array.length; x++) {
