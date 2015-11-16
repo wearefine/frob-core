@@ -121,6 +121,22 @@ function(required_value, missing_value) {
 }
 ```
 
+### Loops
+
+`loopAndExecute` saves characters on `for` loops.
+
+| Param | Description |
+|---|---|
+| `selector` | Array, NodeList or DOM selector |
+| `callback` | requires one argument - the current looped item in callback |
+
+```javascript
+var titles = '';
+FCH.loopAndExecute('.posts', function(post) {
+  titles += post.querySelector('h2').textContent;
+});
+```
+
 ### Local Storage
 
 Read, Update, and Destroy localStorage objects.

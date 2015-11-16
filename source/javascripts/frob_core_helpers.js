@@ -214,6 +214,26 @@ var FCH = {
   },
 
   /**
+   * Goes through all elements and performs function for each item
+   * @param {Array|String} selector - Array, NodeList or DOM selector
+   * @param {Function} callback
+   *   @param {Node} item - current looped item in callback
+   */
+  loopAndExecute: function(selector, callback) {
+    var items;
+
+    if(selector.constructor === Array || selector.constructor === NodeList) {
+      items = selector;
+    } else {
+      items = document.querySelectorAll(selector);
+    }
+
+    for(var i = 0; i < items.length; i++) {
+      callback( items[i] );
+    }
+  },
+
+  /**
    * Increase screen performance and frames per second by diasbling pointer events on scroll
    * @see {@link http://www.thecssninja.com/css/pointer-events-60fps}
    */
