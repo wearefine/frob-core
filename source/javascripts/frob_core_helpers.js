@@ -43,10 +43,34 @@ var FCH = {
     this.resize.push(this.breakpoints);
     this.ready.push(this.mobileFPS);
 
-    var listeners = ['resize', 'scroll', 'ready', 'load'];
-    for(var i = 0; i < listeners.length; i++) {
-      this._attachChildListeners( listeners[i], jsHolder );
+    var _this = this;
+    /**
+     * Attach hooks on child objects to the listener arrays
+     * @private
+     * @param {String} listener - Such as 'resize' or 'load'
+     * @param {Object} jsHolder - The main JavaScript object being queried; adds functionality for DOM callbacks to all children
+     * @see {@link FCH.init}
+     */
+    function attachChildListeners(listener, jsHolder) {
+      var kids = Object.keys(jsHolder);
+
+      // Go through all child objects on the holder
+      _this.loopAndExecute(kids, function(kid) {
+        var child = jsHolder[kid];
+
+        if( child.hasOwnProperty(listener) ) {
+          var child_func = child[listener];
+
+          child_func.prototype = child;
+          _this[listener].push( child_func );
+        }
+      });
     }
+
+    var listeners = ['resize', 'scroll', 'ready', 'load'];
+    this.loopAndExecute(listeners, function(listener) {
+      attachChildListeners( listener, jsHolder );
+    });
 
     this._attachListeners();
   },
@@ -74,7 +98,7 @@ var FCH = {
     offset = this.setDefault(offset, 0);
 
     setTimeout(function(){
-      $('html,body').animate({
+      $('html, body').animate({
         scrollTop: $target.offset().top + offset
       }, duration);
     }, delay);
@@ -215,6 +239,7 @@ var FCH = {
 
   /**
    * Goes through all elements and performs function for each item
+   * @private
    * @param {Array|String} selector - Array, NodeList or DOM selector
    * @param {Function} callback
    *   @param {Node} item - current looped item in callback
@@ -254,96 +279,72 @@ var FCH = {
     _this.scroll.push(FPSScroll);
   },
 
-
-  /**
-   * Attach hooks on child objects to the listener arrays
-   * @access protected
-   * @param {String} listener - Such as 'resize' or 'load'
-   * @param {Object} jsHolder - The main JavaScript object being queried; adds functionality for DOM callbacks to all children
-   * @see {@link FCH.init}
-   */
-  _attachChildListeners: function(listener, jsHolder) {
-    var kids = Object.keys(jsHolder);
-
-    // Go through all child objects on the holder
-    for(var i = 0; i < kids.length; i++) {
-      var child = jsHolder[kids[i]];
-
-      if( child.hasOwnProperty(listener) ) {
-        var child_func = child[listener];
-
-        child_func.prototype = child;
-        FCH[listener].push( child_func );
-      }
-    }
-  },
-
-  /**
-   * Execute listeners using the bundled arrays
-   * @access protected
-   * @param {String} listener - What to hear for, i.e. scroll, resize
-   */
-  _callListener: function(listener) {
-    var listener_array = this[listener];
-
-    for(var x = 0; x < listener_array.length; x++) {
-      listener_array[x].call( listener_array[x].prototype );
-    }
-  },
-
-  /**
-   * Fire events more efficiently
-   * @access protected
-   * @param {String} type - Listener function to trump
-   * @param {String} name - New name for listener
-   * @param {Object} obj - Object to bind/watch (defaults to window)
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/Events/scroll}
-   */
-  _throttle: function(type, name, obj) {
-    obj = obj || window;
-    var running = false;
-
-    var func = function() {
-      if (running) {
-        return;
-      }
-      running = true;
-      requestAnimationFrame(function() {
-        obj.dispatchEvent(new CustomEvent(name));
-        running = false;
-      });
-    };
-
-    obj.addEventListener(type, func);
-  },
-
   /**
    * Actually bind the listeners to objects
-   * @access protected
+   * @protected
    */
   _attachListeners: function() {
     var _this = this;
     var listener = 'optimized';
 
+    /**
+     * Fire events more efficiently
+     * @private
+     * @param {String} type - Listener function to trump
+     * @param {String} name - New name for listener
+     * @param {Object} obj - Object to bind/watch (defaults to window)
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/Events/scroll}
+     */
+    function throttle(type, name, obj) {
+      obj = obj || window;
+      var running = false;
+
+      var func = function() {
+        if (running) {
+          return;
+        }
+        running = true;
+        requestAnimationFrame(function() {
+          obj.dispatchEvent(new CustomEvent(name));
+          running = false;
+        });
+      };
+
+      obj.addEventListener(type, func);
+    }
+
+    /**
+     * Execute listeners using the bundled arrays
+     * @private
+     * @param {String} listener - What to hear for, i.e. scroll, resize
+     */
+    var callListener = function(listener) {
+      var listener_array = _this[listener];
+
+      for(var x = 0; x < listener_array.length; x++) {
+        listener_array[x].call( listener_array[x].prototype );
+      }
+    }
+
     // Optimized fires a more effective listener but the method isn't supported in all browsers
     if(typeof CustomEvent === 'function') {
-      _this._throttle('resize', 'optimizedresize');
-      _this._throttle('scroll', 'optimizedscroll');
+      throttle('resize', 'optimizedresize');
+      throttle('scroll', 'optimizedscroll');
     } else {
       listener = '';
     }
 
     window.addEventListener(listener + 'scroll', function() {
-      _this._callListener('scroll');
+      callListener('scroll');
     });
     window.addEventListener(listener + 'resize', function() {
-      _this._callListener('resize');
+      callListener('resize');
     });
     document.addEventListener('DOMContentLoaded', function() {
-      _this._callListener('ready');
+      callListener('ready');
     });
     window.addEventListener('load', function() {
-      _this._callListener('load');
+      callListener('load');
     });
   },
 
