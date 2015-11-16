@@ -8,20 +8,20 @@ h4 {
   margin: 0 0 40px;
 }
 h1 {
-  font-size: 2.25rem;
+  font-size: remCalc(44px);
 }
 h2 {
-  font-size: 1.75rem;
+  font-size: remCalc(32px);
   line-height: 1.2;
 }
 h3 {
   font-family: $f-content;
   margin-bottom: 5px;
-  font-size: 1.375rem;
+  font-size: remCalc(24px);
 }
 h4 {
   text-transform: uppercase;
   font-family: $f-content;
   margin: 15px 0;
-  font-size: 0.875rem;
+  font-size: remCalc(18px);
 }

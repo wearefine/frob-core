@@ -103,6 +103,7 @@ describe('FCH', function() {
       expect(el.className).toEqual('shelf-toys squeaker');
     });
 
+
     it('should add the new class', function() {
       var el = document.createElement('div');
       FCH.addClass(el, 'squeaker');
@@ -110,16 +111,29 @@ describe('FCH', function() {
       expect(el.className).toEqual(' squeaker');
     });
 
+
+
+
+
+
+
+    // it('should add the new class', function() {
+    //   var el = document.createElement('div');
+    //   FCH.addClass(el, 'squeaker');
+
+    //   expect(el.className).toEqual(' squeaker');
+    // });
+
   });
 
-  describe('x.mobileFPS()', function() {
+  // describe('.mobileFPS()', function() {
 
-    it('should add class when scroll is triggered', function() {
-      window.scroll(0, 1);
+  //   it('should add class when scroll is triggered', function() {
+  //     window.scroll(0, 1);
 
-      expect(document.body.className).toEqual(' u-disable_hover');
-    });
+  //     expect(document.body.className).toEqual(' u-disable_hover');
+  //   });
 
-  });
+  // });
 
 });
