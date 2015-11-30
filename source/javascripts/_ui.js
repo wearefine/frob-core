@@ -4,15 +4,20 @@
 
 FC._ui = {
 
-  init: function() {
+  ready: function() {
+    /*
+    if(FCH.exists('.js-slider')) {
+      this.mySuperSliderInitialization();
+    }
+    */
   },
 
   resize: function() {
-    console.log('Resized');
+    // console.log('Resized');
   },
 
   scroll: function() {
-    console.log('Scroll');
+    // console.log('Scroll');
   }
 
 };

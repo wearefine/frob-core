@@ -5,4 +5,4 @@
 //= require _ui
 //= require_self
 
-;(function() { FCH.ready.push(FC.init); FCH.init(); })();
+;(function() { FCH.init(); })();

@@ -12,60 +12,27 @@ We're not at automatic testing yet, but you can pull this repo down, run `$ bund
 
 1. Copy `source/javascripts/frob_core_helpers.js` and `source/javascripts/frob_core.js` to your project.
 1. Apply the structure of `source/javascripts/application.js` to your project.
-1. Start Frob Core (usually in `application.js`): `;(function() { FCH.ready.push(FC.init); FCH.init(); })();`
+1. Start Frob Core (usually in `application.js`): `;(function() { FCH.init(); })();`
 
-Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {...}`. If it doesn't, the core holder must be passed in `FCH.init`, i.e. `FCH.init(notFCButStillAJavaScriptObject)`.
+Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {};`. If it doesn't, the core holder must be passed in `FCH.init`, i.e. `FCH.init(notFCButStillAJavaScriptObject)`.
 
-The subfunctions of `FC.init()` must be declared without `this`. This is to get around a `this` problem with how FC and FCH are called in `application.js`:
+Nested functions can be declared via Frob Core's [#hooks](hooks).
 
 ```javascript
-var FC = {
-  
-  init: function() {
-    FC._ui.init();
-  }
+FC.ui = {
+  ready: {
+    if(FCH.exists('.js-slider')) {
+      this.mySuperSliderInitialization();
+    }
+  },
 
+  mySuperSliderInitialization: function() {
+    ...
+  }
 };
 ```
 
-Everything else, such as `FC._ui.init()`, can still use `this`.
-
-### Breakpoints
-
-Available from `FCH.bp`. Returns boolean.
-
-| Accessor | Description |
-|---|---|
-| small | window width less than or equal to 767 |
-| small_up | window width greater than or equal to 768 |
-| medium_portrait | window width between 768 and 960 |
-| medium | window width between 768 and 1024 |
-| large_down | window width less than 1024 |
-| large | window width greater than 1024 |
-
-```javascript
-if(FCH.bp.small) {
-  FCH.$body.addClass('mobile');
-}
-```
-
-### Dimensions
-
-Available from `FCH.dimensions`
-
-| Accessor | Description |
-|---|---|
-| ww | window width |
-| wh | window height |
-
-### Cached jQuery Objects
-
-Only available if jQuery is included.
-
-| Accessor | Description |
-|---|---|
-| `FCH.$body` | equivalent to `$('body')` |
-| `FCH.$window` | equivalent to `$(window)` |
+Direct descendants of `FC` have access to the [#hooks](hooks); grandchildren (i.e. `FC.ui.sliders`) should be initialized within a conditional in a `ready` or `load` hook. In extremely rare and special circumstances that should be treated as such, they can be initialized by manual addition, i.e. `FCH.ready.push(mySuperSliderInitialization)`.
 
 ### Hooks
 
@@ -110,6 +77,43 @@ FC._ui = {
 }
 // a scary alert is triggered every time the window is resized
 ```
+
+### Breakpoints
+
+Available from `FCH.bp`. Returns boolean.
+
+| Accessor | Description |
+|---|---|
+| small | window width less than or equal to 767 |
+| small_up | window width greater than or equal to 768 |
+| medium_portrait | window width between 768 and 960 |
+| medium | window width between 768 and 1024 |
+| large_down | window width less than 1024 |
+| large | window width greater than 1024 |
+
+```javascript
+if(FCH.bp.small) {
+  FCH.$body.addClass('mobile');
+}
+```
+
+### Dimensions
+
+Available from `FCH.dimensions`
+
+| Accessor | Description |
+|---|---|
+| ww | window width |
+| wh | window height |
+
+### Cached jQuery Objects
+
+Only available if jQuery is included.
+
+| Accessor | Description |
+|---|---|
+| `FCH.$body` | equivalent to `$('body')` |
+| `FCH.$window` | equivalent to `$(window)` |
 
 ### Default Values
 
