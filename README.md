@@ -16,7 +16,7 @@ We're not at automatic testing yet, but you can pull this repo down, run `$ bund
 
 Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {};`. If it doesn't, the core holder must be passed in `FCH.init`, i.e. `FCH.init(notFCButStillAJavaScriptObject)`.
 
-Nested functions can be declared via Frob Core's [#hooks](hooks).
+Nested functions can be declared via Frob Core's [hooks](#hooks).
 
 ```javascript
 FC.ui = {
@@ -32,7 +32,7 @@ FC.ui = {
 };
 ```
 
-Direct descendants of `FC` have access to the [#hooks](hooks); grandchildren (i.e. `FC.ui.sliders`) should be initialized within a conditional in a `ready` or `load` hook. In extremely rare and special circumstances that should be treated as such, they can be initialized by manual addition, i.e. `FCH.ready.push(mySuperSliderInitialization)`.
+Direct descendants of `FC` have access to the [hooks](#hooks); grandchildren (i.e. `FC.ui.sliders`) should be initialized within a conditional in a `ready` or `load` hook. In extremely rare and special circumstances that should be treated as such, they can be initialized by manual addition, i.e. `FCH.ready.push(mySuperSliderInitialization)`.
 
 ### Hooks
 
