@@ -10,7 +10,6 @@
 @include bp(medium-only) { /* medium only */ }
 @include bp(medium-portrait) { /* medium portrait */ }
 @include bp(large) { /* large */ }
-@include bp(x-large) { /* x-large */ }
 
 // Max width queries need to come after min-width, and in reverse order
 @include bp(large-down) { /* large down */ }
