@@ -373,3 +373,61 @@ Invert a number.
   top: negate(10px);
 }
 ```
+
+## File Structure and Naming Conventions
+
+### JavaScript
+
+Child files should have declarations in the following order:
+
+1. Scoped variables
+1. FCH hooks
+1. Public functions
+1. Protected functions
+
+Example: 
+
+```javascript
+
+FC.ui = {
+  logo_height: 100,
+
+  ready: function() { 
+    this.setLogoHeight();
+  },
+  
+  load: function() { 
+    this.setLogoHeight();
+  },
+  
+  resize: function() { 
+    this.setLogoHeight();
+  },
+
+  setLogoHeight: function() { 
+    var logo = this._getLogo();
+    this.logo_height = logo.innerHeight;
+  },
+
+  _getLogo: function() {
+    return document.querySelector('.logo');
+  }
+}
+```
+
+Functions should be lowerCamelCase; variables should be lower_underscore. All functions must include a short description and should be documented using [JSDoc](http://usejsdoc.org/) standards.
+
+```javascript
+/**
+ * Update value of scoped `logo_height` var
+ * @fires _getLogo
+ */
+setLogoHeight: function() { ... },
+
+/**
+ * Find the logo element
+ * @protected
+ * @return {Node}
+ */
+_getLogo: function() { ... }
+```

@@ -2,7 +2,7 @@
 // require jquery_ujs
 //= require frob_core_helpers
 //= require frob_core
-//= require _ui
+//= require FC.ui
 //= require_self
 
 ;(function() { FCH.init(); })();

@@ -2,7 +2,7 @@
 
 'use strict';
 
-FC._ui = {
+FC.ui = {
 
   ready: function() {
     /*
