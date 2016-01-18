@@ -10,7 +10,22 @@
     "karma": "~0.13",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.0",
-    "karma-chrome-launcher": "^0.2.2"
+    "karma-chrome-launcher": "^0.2.2",
+    "body-parser": "^1.7.0",
+    "express": "^4.8.8",
+    "gulp": "^3.8.7",
+    "jstransformer-uglify-js": "latest",
+    "gulp-util": "^3.0.1",
+    "gulp-sass": "latest",
+    "gulp-csso": "latest",
+    "gulp-uglify": "^1.0.1",
+    "gulp-jade": "latest",
+    "gulp-concat": "^2.3.4",
+    "gulp-autoprefixer": "latest",
+    "gulp-rename": "latest",
+    "gulp-livereload": "latest",
+    "tiny-lr": "latest",
+    "marked": "latest"
   },
   "scripts": {
     "test": "karma start ./test/karma.conf.js"
