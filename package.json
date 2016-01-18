@@ -1,0 +1,37 @@
+{
+  "name": "frob-core",
+  "version": "1.0.0",
+  "description": "A framework for front (frob) enders (tenders) everywhere",
+  "main": "source/javascripts/frob_core_helpers.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "karma": "~0.13",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-chrome-launcher": "^0.2.2"
+  },
+  "scripts": {
+    "test": "karma start ./test/karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wearefine/frob-core.git"
+  },
+  "keywords": [
+    "helpers",
+    "easy-javascript",
+    "framework"
+  ],
+  "author": "Tim Shedor <tim@wearefine.com>",
+  "contributors": [
+    "FINE Design Group, Inc. Dev Department",
+    "Kyle Shevlin <kyle@wearefine.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wearefine/frob-core/issues"
+  },
+  "homepage": "https://github.com/wearefine/frob-core"
+}

@@ -17,3 +17,5 @@
 # Ignore .DS_store file
 .DS_Store
 .rvmrc
+
+node_modules/*

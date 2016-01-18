@@ -1,5 +1,3 @@
-;(function() { FCH.ready.push(FC.init); FCH.init(); })();
-
 describe('FCH', function() {
 
   describe('.setDefault()', function() {
@@ -72,7 +70,7 @@ describe('FCH', function() {
       el.className = 'squeaker';
       FCH.removeClass(el, 'squeaker');
 
-      expect(el.className).toEqual('');
+      expect(el.className).toEqual(' ');
     });
 
   });
@@ -110,19 +108,6 @@ describe('FCH', function() {
 
       expect(el.className).toEqual(' squeaker');
     });
-
-
-
-
-
-
-
-    // it('should add the new class', function() {
-    //   var el = document.createElement('div');
-    //   FCH.addClass(el, 'squeaker');
-
-    //   expect(el.className).toEqual(' squeaker');
-    // });
 
   });
 

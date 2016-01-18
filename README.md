@@ -1,5 +1,7 @@
 # Frob Core
 
+[![Build Status](https://travis-ci.org/wearefine/frob-core.svg?branch=master)](https://travis-ci.org/wearefine/frob-core) [![Code Climate](https://codeclimate.com/github/wearefine/frob-core/badges/gpa.svg)](https://codeclimate.com/github/wearefine/frob-core)
+
 Because you're not [hardcore](https://www.youtube.com/watch?v=f-mPnmfrm6I).
 
 P.S. The inline code documentation in this pup is rock solid.
