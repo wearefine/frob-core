@@ -7,18 +7,22 @@ h4 {
   line-height: 1.1;
   margin: 0 0 40px;
 }
+
 h1 {
   font-size: remCalc(44px);
 }
+
 h2 {
   font-size: remCalc(32px);
   line-height: 1.2;
 }
+
 h3 {
   font-family: $f-content;
   margin-bottom: 5px;
   font-size: remCalc(24px);
 }
+
 h4 {
   text-transform: uppercase;
   font-family: $f-content;
