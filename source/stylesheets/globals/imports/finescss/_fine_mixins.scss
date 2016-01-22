@@ -132,18 +132,16 @@
   @return null;
 }
 
-/**
- * Throw it your list of css classes without periods and it'll return a z-index or nothing at all if the parent selector is not in the list
- * @example
- *   $list: (
- *     '.modal-bg',
- *     '.modal-content'
- *   );
- *
- *   .modal-bg {
- *     @include stack($list);
- *   }
- */
+// Throw it your list of css classes without periods and it'll return a z-index or nothing at all if the parent selector is not in the list
+// @example
+//   $list: (
+//     '.modal-bg',
+//     '.modal-content'
+//   );
+//
+//   .modal-bg {
+//     @include stack($list);
+//   }
 @mixin stack($list, $element:false) {
   $z: false;
 

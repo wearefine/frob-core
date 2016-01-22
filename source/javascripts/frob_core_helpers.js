@@ -280,6 +280,36 @@ var FCH = {
   },
 
   /**
+   * Fire event only once
+   * @param {Function} func - Function to execute on debounced
+   * @param {Integer} [threshold=250] - Delay to check if func has been executed
+   * @see {@link http://unscriptable.com/2009/03/20/debouncing-javascript-methods/}
+   * @example
+   *   FCH.resize.push( FCH.debounce( this.resourceConsumingFunction.bind(this) ) );
+   * @return {Function} Called func, either now or later
+   */
+  debounce: function(func, threshold) {
+    var timeout;
+
+    return function() {
+      var obj = this, args = arguments;
+
+      function delayed () {
+        timeout = null;
+        func.apply(obj, args);
+      }
+
+      if (timeout) {
+        clearTimeout(timeout);
+      } else {
+        func.apply(obj, args);
+      }
+
+      timeout = setTimeout(delayed, threshold || 250);
+    };
+  },
+
+  /**
    * Actually bind the listeners to objects
    * @protected
    */

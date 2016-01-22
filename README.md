@@ -6,10 +6,6 @@ Because you're not [hardcore](https://www.youtube.com/watch?v=f-mPnmfrm6I).
 
 P.S. The inline code documentation in this pup is rock solid.
 
-## Testing
-
-We're not at automatic testing yet, but you can pull this repo down, run `$ bundle install && middleman server`, and check for any errors at `http://localhost:4567`.
-
 ## JavaScript
 
 1. Copy `source/javascripts/frob_core_helpers.js` and `source/javascripts/frob_core.js` to your project.
@@ -79,6 +75,31 @@ FC._ui = {
 }
 // a scary alert is triggered every time the window is resized
 ```
+
+#### Debounced Events
+
+Sometimes, a callback function on rapid-firing window events can be resource-intensive. Thanks to pioneering efforts from [John Hann](http://unscriptable.com/2009/03/20/debouncing-javascript-methods/), [Paul Irish](http://www.paulirish.com/2009/throttled-smartresize-jquery-event-handler/), and [Underscore.js](https://github.com/jashkenas/underscore/blob/master/underscore.js#L853), these events can be tricked to fire only once or twice instead of continuously.
+
+Wrap your function in `FCH.debounce` when adding it to a hook.
+
+```javascript
+FC.nav_listeners = {
+  ready: function() {
+    FCH.resize.push( FCH.debounce( this.resourceConsumingFunction.bind(this) ) );
+  },
+
+  resourceConsumingFunction: function() {
+    this.destroy();
+  },
+
+  destroy: function() { ... }
+};
+```
+
+| Param | Description |
+|---|---|
+| `func` | Callback function |
+| `threshold` | Milliseconds to check between fires (defaults to 250) |
 
 ### Breakpoints
 
@@ -433,3 +454,14 @@ setLogoHeight: function() { ... },
  */
 _getLogo: function() { ... }
 ```
+
+## Testing
+
+Install all dependencies:
+
+```bash
+npm install --save-dev
+```
+
+* `npm test` provides a quick, one-run test as defined in [test/karma.conf.js](test/karma.conf.js)
+* `npm run test:dev` opens a Karma instance that watches for file changes, as defined in [test/karma.conf.js](test/local.karma.conf.js)

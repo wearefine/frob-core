@@ -28,7 +28,8 @@
     "marked": "latest"
   },
   "scripts": {
-    "test": "karma start ./test/karma.conf.js"
+    "test": "karma start ./test/karma.conf.js",
+    "test:dev": "karma start ./test/local.karma.conf.js"
   },
   "repository": {
     "type": "git",
