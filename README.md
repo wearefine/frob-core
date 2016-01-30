@@ -10,9 +10,9 @@ P.S. The inline code documentation in this pup is rock solid.
 
 1. Copy `source/javascripts/frob_core_helpers.js` and `source/javascripts/frob_core.js` to your project.
 1. Apply the structure of `source/javascripts/application.js` to your project.
-1. Start Frob Core (usually in `application.js`): `;(function() { FCH.init(); })();`
+1. Start Frob Core (usually in `application.js`): `;(function() { window.FCH = new FrobCoreHelpers(); })();`
 
-Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {};`. If it doesn't, the core holder must be passed in `FCH.init`, i.e. `FCH.init(notFCButStillAJavaScriptObject)`.
+Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {};`. If it doesn't, the core holder must be passed in initialization, i.e. `new FrobCoreHelpers()`.
 
 Nested functions can be declared via Frob Core's [hooks](#hooks).
 
@@ -267,7 +267,7 @@ If you want to name your ordered list different from your classes, pass a key as
 
 #### bp
 
-Put a block of content within a media breakpoint using the list defined in `_breakpoints.scss`. 
+Put a block of content within a media breakpoint using the list defined in `_breakpoints.scss`.
 
 ```scss
 .show--mobile {
@@ -308,7 +308,7 @@ Pass a block to apply properties to input placeholder styles. Strongly recommend
 
 #### ie
 
-Target specific Internet Explorer versions, and optionally pass in a version number. **Only use this mixin as a last resort. Feature detection is strongly preferred.** 
+Target specific Internet Explorer versions, and optionally pass in a version number. **Only use this mixin as a last resort. Feature detection is strongly preferred.**
 
 ```scss
 .animated-element {
@@ -408,26 +408,26 @@ Child files should have declarations in the following order:
 1. Public functions
 1. Protected functions
 
-Example: 
+Example:
 
 ```javascript
 
 FC.ui = {
   logo_height: 100,
 
-  ready: function() { 
-    this.setLogoHeight();
-  },
-  
-  load: function() { 
-    this.setLogoHeight();
-  },
-  
-  resize: function() { 
+  ready: function() {
     this.setLogoHeight();
   },
 
-  setLogoHeight: function() { 
+  load: function() {
+    this.setLogoHeight();
+  },
+
+  resize: function() {
+    this.setLogoHeight();
+  },
+
+  setLogoHeight: function() {
     var logo = this._getLogo();
     this.logo_height = logo.innerHeight;
   },
