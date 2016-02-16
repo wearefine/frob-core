@@ -158,238 +158,241 @@
     return this;
   }
 
-  /**
-   * Apply value to variable if it has none
-   * @param {var} variable - variable to set default to
-   * @param {*} value - default value to attribute to variable
-   * @return {*} Existing value or passed value argument
-   */
-  FrobCoreHelpers.prototype.setDefault = function(variable, value){
-    return (typeof variable === 'undefined') ? value : variable;
-  };
-
-  /**
-   * Nice, unjanky scroll to element
-   * @param {jQuery} $target - Scroll to the top of this object
-   * @param {Number} [duration=2000] - How long the scroll lasts
-   * @param {Number} [delay=100] - How long to wait after trigger
-   * @param {Number} [offset=0] - Additional offset to add to the scrollTop
-   */
-  FrobCoreHelpers.prototype.smoothScroll = function($target, duration, delay, offset){
-    duration = this.setDefault(duration, 2000);
-    delay = this.setDefault(delay, 100);
-    offset = this.setDefault(offset, 0);
-
-    setTimeout(function(){
-      $('html, body').animate({
-        scrollTop: $target.offset().top + offset
-      }, duration);
-    }, delay);
-  };
-
-  /**
-   * Store a string locally
-   * @param {String} key - Accessible identifier
-   * @param {String} obj - Value of identifier
-   * @return {String} Value of key in localStorage
-   */
-  FrobCoreHelpers.prototype.localSet = function(key, obj) {
-    var value = JSON.stringify(obj);
-    localStorage[key] = JSON.stringify(obj);
-
-    return value;
-  };
-
-  /**
-   * Retrieve localstorage object value
-   * @param {String} key - Accessible identifier
-   * @return {String|Boolean} Value of localStorage object or false if key is undefined
-   */
-  FrobCoreHelpers.prototype.localGet = function(key) {
-    if (typeof localStorage[key] !== 'undefined') {
-      return JSON.parse(localStorage[key]);
-    } else {
-      return false;
-    }
-  };
-
-  /**
-   * Clear value of localstorage object. If no key is passed, clear all objects
-   * @param {String} [key] - Accessible identifier
-   * @return {Undefined} Result of clear or removeItem action
-   */
-  FrobCoreHelpers.prototype.localClear = function(key){
-    return typeof key === 'undefined' ? localStorage.clear() : localStorage.removeItem(key);
-  };
-
-  /**
-   * Check if IE is current browser
-   * @param {Number|String} version
-   * @return {Boolean}
-   */
-  FrobCoreHelpers.prototype.isIE = function(version) {
-    var regex = new RegExp('msie' + (!isNaN(version)?('\\s' + version) : ''), 'i');
-    return regex.test(navigator.userAgent);
-  };
-
-  /**
-   * Check for existence of element on page
-   * @param {String} query - JavaScript object
-   * @return {Boolean}
-   */
-  FrobCoreHelpers.prototype.exists = function(query) {
-    return !!document.querySelector(query);
-  };
-
-  /**
-   * Provides accessible booleans for fluctuating screensizes
-   */
-  FrobCoreHelpers.prototype.breakpoints = function() {
-    var ww, wh;
-
-    ww = window.innerWidth;
-    wh = window.innerHeight;
+  FrobCoreHelpers.prototype =
 
     /**
-     * Dimensions
-     * @namespace
-     * @description Holder for screen size numbers, set on load and reset on resize
-     * @property {Number} ww - Window width
-     * @property {Number} wh - Window height
+     * Apply value to variable if it has none
+     * @param {var} variable - variable to set default to
+     * @param {*} value - default value to attribute to variable
+     * @return {*} Existing value or passed value argument
      */
-    this.dimensions = {
-      ww: ww,
-      wh: wh
-    };
+    setDefault: function(variable, value){
+      return (typeof variable === 'undefined') ? value : variable;
+    },
 
     /**
-     * Breakpoints
-     * @namespace
-     * @description Holder for responsive breakpoints, set on load and reset on resize
-     * @property {Boolean} small - Window width is less than 768
-     * @property {Boolean} small_up - Window width is greater than 767
-     * @property {Boolean} medium_portrait - Window width is between 767 and 960
-     * @property {Boolean} medium - Window width is between 767 and 1025
-     * @property {Boolean} large_down - Window width is less than 1024
-     * @property {Boolean} large - Window width is greater than 1024
+     * Nice, unjanky scroll to element
+     * @param {jQuery} $target - Scroll to the top of this object
+     * @param {Number} [duration=2000] - How long the scroll lasts
+     * @param {Number} [delay=100] - How long to wait after trigger
+     * @param {Number} [offset=0] - Additional offset to add to the scrollTop
      */
-    this.bp = {
-      small: ww < 768,
-      small_up: ww > 767,
-      medium_portrait: ww > 767 && ww < 960,
-      medium: ww > 767 && ww < 1025,
-      large_down: ww < 1024,
-      large: ww > 1024
-    };
-  };
+    smoothScroll: function($target, duration, delay, offset){
+      duration = this.setDefault(duration, 2000);
+      delay = this.setDefault(delay, 100);
+      offset = this.setDefault(offset, 0);
 
-  /**
-   * Determine if element has class with vanilla JS
-   * @param {Object} el JavaScript element
-   * @param {String} cls Class name
-   * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
-   * @return {Boolean}
-   */
-  FrobCoreHelpers.prototype.hasClass = function(el, cls) {
-    return !!el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-  };
+      setTimeout(function(){
+        $('html, body').animate({
+          scrollTop: $target.offset().top + offset
+        }, duration);
+      }, delay);
+    },
 
-  /**
-   * Add class to element with vanilla JS
-   * @param {Object} el JavaScript element
-   * @param {String} cls Class name
-   * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
-   */
-  FrobCoreHelpers.prototype.addClass = function(el, cls) {
-    if (!this.hasClass(el, cls)) {
-      el.className = el.className.trim();
-      el.className += ' ' + cls;
-    }
-  };
+    /**
+     * Clear value of localstorage object. If no key is passed, clear all objects
+     * @param {String} [key] - Accessible identifier
+     * @return {Undefined} Result of clear or removeItem action
+     */
+    localClear: function(key){
+      return typeof key === 'undefined' ? localStorage.clear() : localStorage.removeItem(key);
+    },
 
-  /**
-   * Remove class from element with vanilla JS
-   * @param {Object} el JavaScript element
-   * @param {String} cls Class name
-   * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
-   */
-  FrobCoreHelpers.prototype.removeClass = function(el, cls) {
-    if (this.hasClass(el, cls)) {
-      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-      el.className = el.className.replace(reg, ' ');
-    }
-  };
-
-  /**
-   * Goes through all elements and performs function for each item
-   * @private
-   * @param {Array|String} selector - Array, NodeList or DOM selector
-   * @param {Function} callback
-   *   @param {Node} item - current looped item in callback
-   */
-  FrobCoreHelpers.prototype.loopAndExecute = function(selector, callback) {
-    var items;
-
-    if(selector.constructor === Array || selector.constructor === NodeList) {
-      items = selector;
-    } else {
-      items = document.querySelectorAll(selector);
-    }
-
-    for(var i = 0; i < items.length; i++) {
-      callback( items[i] );
-    }
-  };
-
-  /**
-   * Increase screen performance and frames per second by diasbling pointer events on scroll
-   * @see {@link http://www.thecssninja.com/css/pointer-events-60fps}
-   */
-  FrobCoreHelpers.prototype.mobileFPS = function(){
-    var scroll_timer;
-    var body = document.getElementsByTagName('body')[0];
-
-    function allowHover() {
-      return this.removeClass(body, 'u-disable_hover');
-    };
-
-    function FPSScroll() {
-      clearTimeout(scroll_timer),
-      this.hasClass(body, 'u-disable_hover') || this.addClass(body, 'u-disable_hover'),
-      scroll_timer = setTimeout(allowHover.bind(this), 500 );
-    };
-
-    this.scroll.push( FPSScroll.bind(this) );
-  };
-
-  /**
-   * Fire event only once
-   * @param {Function} func - Function to execute on debounced
-   * @param {Integer} [threshold=250] - Delay to check if func has been executed
-   * @see {@link http://unscriptable.com/2009/03/20/debouncing-javascript-methods/}
-   * @example
-   *   FCH.resize.push( FCH.debounce( this.resourceConsumingFunction.bind(this) ) );
-   * @return {Function} Called func, either now or later
-   */
-  FrobCoreHelpers.prototype.debounce = function(func, threshold) {
-    var timeout;
-
-    return function() {
-      var obj = this, args = arguments;
-
-      function delayed () {
-        timeout = null;
-        func.apply(obj, args);
-      }
-
-      if (timeout) {
-        clearTimeout(timeout);
+    /**
+     * Retrieve localstorage object value
+     * @param {String} key - Accessible identifier
+     * @return {String|Boolean} Value of localStorage object or false if key is undefined
+     */
+    localGet: function(key) {
+      if (typeof localStorage[key] !== 'undefined') {
+        return JSON.parse(localStorage[key]);
       } else {
-        func.apply(obj, args);
+        return false;
+      }
+    },
+
+     /**
+     * Store a string locally
+     * @param {String} key - Accessible identifier
+     * @param {String} obj - Value of identifier
+     * @return {String} Value of key in localStorage
+     */
+    localSet: function(key, obj) {
+      var value = JSON.stringify(obj);
+      localStorage[key] = value;
+
+      return value;
+    },
+
+    /**
+     * Check if IE is current browser
+     * @param {Number|String} version
+     * @return {Boolean}
+     */
+    isIE: function(version) {
+      var regex = new RegExp('msie' + (!isNaN(version)?('\\s' + version) : ''), 'i');
+      return regex.test(navigator.userAgent);
+    },
+
+    /**
+     * Check for existence of element on page
+     * @param {String} query - JavaScript object
+     * @return {Boolean}
+     */
+    exists: function(query) {
+      return !!document.querySelector(query);
+    },
+
+    /**
+     * Provides accessible booleans for fluctuating screensizes
+     */
+    breakpoints: function() {
+      var ww, wh;
+
+      ww = window.innerWidth;
+      wh = window.innerHeight;
+
+      /**
+       * Dimensions
+       * @namespace
+       * @description Holder for screen size numbers, set on load and reset on resize
+       * @property {Number} ww - Window width
+       * @property {Number} wh - Window height
+       */
+      this.dimensions = {
+        ww: ww,
+        wh: wh
+      };
+
+      /**
+       * Breakpoints
+       * @namespace
+       * @description Holder for responsive breakpoints, set on load and reset on resize
+       * @property {Boolean} small - Window width is less than 768
+       * @property {Boolean} small_up - Window width is greater than 767
+       * @property {Boolean} medium_portrait - Window width is between 767 and 960
+       * @property {Boolean} medium - Window width is between 767 and 1025
+       * @property {Boolean} large_down - Window width is less than 1024
+       * @property {Boolean} large - Window width is greater than 1024
+       */
+      this.bp = {
+        small: ww < 768,
+        small_up: ww > 767,
+        medium_portrait: ww > 767 && ww < 960,
+        medium: ww > 767 && ww < 1025,
+        large_down: ww < 1024,
+        large: ww > 1024
+      };
+    },
+
+    /**
+     * Determine if element has class with vanilla JS
+     * @param {Object} el JavaScript element
+     * @param {String} cls Class name
+     * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
+     * @return {Boolean}
+     */
+    hasClass: function(el, cls) {
+      return !!el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    },
+
+    /**
+     * Add class to element with vanilla JS
+     * @param {Object} el JavaScript element
+     * @param {String} cls Class name
+     * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
+     */
+    addClass: function(el, cls) {
+      if (!this.hasClass(el, cls)) {
+        el.className = el.className.trim();
+        el.className += ' ' + cls;
+      }
+    },
+
+    /**
+     * Remove class from element with vanilla JS
+     * @param {Object} el JavaScript element
+     * @param {String} cls Class name
+     * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
+     */
+    removeClass: function(el, cls) {
+      if (this.hasClass(el, cls)) {
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+        el.className = el.className.replace(reg, ' ');
+      }
+    },
+
+    /**
+     * Goes through all elements and performs function for each item
+     * @private
+     * @param {Array|String} selector - Array, NodeList or DOM selector
+     * @param {Function} callback
+     *   @param {Node} item - current looped item in callback
+     */
+    loopAndExecute: function(selector, callback) {
+      var items;
+
+      if(selector.constructor === Array || selector.constructor === NodeList) {
+        items = selector;
+      } else {
+        items = document.querySelectorAll(selector);
       }
 
-      timeout = setTimeout(delayed, threshold || 250);
-    };
+      for(var i = 0; i < items.length; i++) {
+        callback( items[i] );
+      }
+    },
+
+    /**
+     * Increase screen performance and frames per second by diasbling pointer events on scroll
+     * @see {@link http://www.thecssninja.com/css/pointer-events-60fps}
+     */
+    mobileFPS: function(){
+      var scroll_timer;
+      var body = document.getElementsByTagName('body')[0];
+
+      function allowHover() {
+        return this.removeClass(body, 'u-disable_hover');
+      };
+
+      function FPSScroll() {
+        clearTimeout(scroll_timer),
+        this.hasClass(body, 'u-disable_hover') || this.addClass(body, 'u-disable_hover'),
+        scroll_timer = setTimeout(allowHover.bind(this), 500 );
+      };
+
+      this.scroll.push( FPSScroll.bind(this) );
+    },
+
+    /**
+     * Fire event only once
+     * @param {Function} func - Function to execute on debounced
+     * @param {Integer} [threshold=250] - Delay to check if func has been executed
+     * @see {@link http://unscriptable.com/2009/03/20/debouncing-javascript-methods/}
+     * @example
+     *   FCH.resize.push( FCH.debounce( this.resourceConsumingFunction.bind(this) ) );
+     * @return {Function} Called func, either now or later
+     */
+    debounce: function(func, threshold) {
+      var timeout;
+
+      return function() {
+        var obj = this, args = arguments;
+
+        function delayed () {
+          timeout = null;
+          func.apply(obj, args);
+        }
+
+        if (timeout) {
+          clearTimeout(timeout);
+        } else {
+          func.apply(obj, args);
+        }
+
+        timeout = setTimeout(delayed, threshold || 250);
+      };
+    }
   };
 
   return FrobCoreHelpers;
