@@ -158,7 +158,7 @@
     return this;
   }
 
-  FrobCoreHelpers.prototype =
+  FrobCoreHelpers.prototype = {
 
     /**
      * Apply value to variable if it has none
@@ -192,21 +192,40 @@
     /**
      * Clear value of localstorage object. If no key is passed, clear all objects
      * @param {String} [key] - Accessible identifier
-     * @return {Undefined} Result of clear or removeItem action
+     * @return {Undefined|Boolean} Result of clear or removeItem action
      */
     localClear: function(key){
-      return typeof key === 'undefined' ? localStorage.clear() : localStorage.removeItem(key);
+      try {
+        if(typeof key === 'undefined') {
+          localStorage.clear();
+        } else {
+          localStorage.removeItem(key);
+        }
+      } catch(e) {
+        return false;
+      }
     },
 
     /**
      * Retrieve localstorage object value
      * @param {String} key - Accessible identifier
-     * @return {String|Boolean} Value of localStorage object or false if key is undefined
+     * @return {String|Object|Boolean} Value of localStorage object or false if key is undefined
      */
     localGet: function(key) {
-      if (typeof localStorage[key] !== 'undefined') {
-        return JSON.parse(localStorage[key]);
-      } else {
+      // localStorage is unavailable in some incognito/private browsers
+      try {
+        if(localStorage.getItem(key)) {
+          var value = localStorage.getItem(key);
+
+          if(value.indexOf('{') === 0) {
+            return JSON.parse( value );
+          } else {
+            return value;
+          }
+        } else {
+          return false;
+        }
+      } catch(e) {
         return false;
       }
     },
@@ -214,12 +233,23 @@
      /**
      * Store a string locally
      * @param {String} key - Accessible identifier
-     * @param {String} obj - Value of identifier
+     * @param {String|Object} obj - Value of identifier
      * @return {String} Value of key in localStorage
      */
     localSet: function(key, obj) {
-      var value = JSON.stringify(obj);
-      localStorage[key] = value;
+      var value;
+
+      if(obj.constructor === String) {
+        value = obj;
+      } else {
+        value = JSON.stringify(obj);
+      }
+
+      try {
+        localStorage.setItem(key, value);
+      } catch(e) {
+        // noop
+      }
 
       return value;
     },
@@ -396,5 +426,4 @@
   };
 
   return FrobCoreHelpers;
-
 });

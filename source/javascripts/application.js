@@ -5,4 +5,4 @@
 //= require FC.ui
 //= require_self
 
-;(function() { window.FCH = new FrobCoreHelpers(DD); })();
+var FCH = new FrobCoreHelpers();

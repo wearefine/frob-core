@@ -11,11 +11,11 @@ module.exports = function (config) {
     files: [
       'spec/*.js',
       '../source/javascripts/frob_core_helpers.js',
-      {
-        pattern: '../source/javascripts/*.js',
-        served: true,
-        included: true
-      }
+      // {
+      //   pattern: '../source/javascripts/*.js',
+      //   served: true,
+      //   included: true
+      // }
     ],
     reporters: ['progress'],
     // enable / disable colors in the output (reporters and logs)

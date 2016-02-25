@@ -1,4 +1,10 @@
 describe('FCH', function() {
+  var FCH;
+  var FC = {};
+
+  beforeEach(function() {
+    FCH = new FrobCoreHelpers(FC);
+  });
 
   describe('.setDefault()', function() {
 
@@ -70,7 +76,7 @@ describe('FCH', function() {
       el.className = 'squeaker';
       FCH.removeClass(el, 'squeaker');
 
-      expect(el.className).toEqual(' ');
+      expect(el.className.indexOf('squeaker')).toEqual( -1 );
     });
 
   });
@@ -109,6 +115,61 @@ describe('FCH', function() {
       expect(el.className).toEqual(' squeaker');
     });
 
+  });
+
+  describe('localStorage adapter', function() {
+    beforeEach(function() {
+      localStorage.clear();
+    });
+
+    describe('.localSet()', function() {
+      it('should add the new key/value pair', function() {
+        FCH.localSet('language', 'Spanish');
+
+        expect(FCH.localGet('language')).toEqual( 'Spanish' );
+      });
+
+      it('should return the value after setting the key/value pair', function() {
+        var value = FCH.localSet('language', 'Spanish');
+
+        expect(value).toEqual('Spanish');
+      });
+    });
+
+    describe('.localGet()', function() {
+      it('should retrieve the value provided a key', function() {
+        FCH.localSet('language', 'Spanish');
+
+        expect( FCH.localGet('language') ).toEqual( 'Spanish' );
+      });
+
+      it('should return false if key is not present', function() {
+        expect( FCH.localGet('language') ).toBe(false);
+      });
+    });
+
+    describe('.localSet()', function() {
+      it('should clear all values if not provided a key', function() {
+        FCH.localSet('language', 'Spanish');
+
+        FCH.localClear();
+
+        expect( FCH.localGet('language') ).toBe(false);
+      });
+
+      it('should clear a specific pair provided a key', function() {
+        FCH.localSet('language', 'Spanish');
+        FCH.localSet('catchphrase', 'infinito');
+
+        // Ensure both values saved
+        expect( localStorage.length ).toEqual(2);
+
+        FCH.localClear('language');
+
+        expect( localStorage.length ).toEqual(1);
+        expect( FCH.localGet('language') ).toBe(false);
+      });
+    });
   });
 
   // describe('.mobileFPS()', function() {
