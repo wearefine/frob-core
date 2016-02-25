@@ -172,6 +172,35 @@ describe('FCH', function() {
     });
   });
 
+  describe('.loop()', function() {
+    it('should find all elements with a selector', function() {
+      var selector1 = document.createElement('div');
+      var selector2 = document.createElement('div');
+
+      FCH.addClass(selector1, 'marker');
+      FCH.addClass(selector2, 'marker');
+
+      document.body.innerHTML += selector1.outerHTML + selector2.outerHTML;
+      var iterations = 0;
+
+      FCH.loop('.marker', function(el) {
+        iterations++;
+      });
+
+      expect(iterations).toEqual(2);
+    });
+
+    it('should evaluate all elements of an array', function() {
+      var arr = [1, 2, 3];
+
+      FCH.loop(arr, function(item, idx) {
+        arr[idx] += 1;
+      });
+
+      expect(arr).toEqual( [2,3,4] );
+    });
+  });
+
   // describe('.mobileFPS()', function() {
 
   //   it('should add class when scroll is triggered', function() {

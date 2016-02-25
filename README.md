@@ -150,7 +150,7 @@ function(required_value, missing_value) {
 
 ### Loops
 
-`loopAndExecute` saves characters on `for` loops.
+`loop` saves characters on `for` loops.
 
 | Param | Description |
 |---|---|
@@ -159,7 +159,7 @@ function(required_value, missing_value) {
 
 ```javascript
 var titles = '';
-FCH.loopAndExecute('.posts', function(post) {
+FCH.loop('.posts', function(post) {
   titles += post.querySelector('h2').textContent;
 });
 ```

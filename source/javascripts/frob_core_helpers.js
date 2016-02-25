@@ -111,9 +111,7 @@
    * @return {FrobCoreHelpers}
    */
   function FrobCoreHelpers(jsHolder) {
-    if (typeof FC === 'undefined') {
-      var FC = {};
-    }
+    jsHolder = this.setDefault(jsHolder, {});
 
     /* Listener Arrays */
     /** @type {Array.<function>} */
@@ -124,8 +122,6 @@
     this.ready = [];
     /** @type {Array.<function>} */
     this.load = [];
-
-    jsHolder = this.setDefault(jsHolder, FC);
 
     // IE detection
     this.IE10 = this.isIE(10);
@@ -317,8 +313,8 @@
 
     /**
      * Determine if element has class with vanilla JS
-     * @param {Object} el JavaScript element
-     * @param {String} cls Class name
+     * @param {Object} el - JavaScript element
+     * @param {String} cls - Class name
      * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
      * @return {Boolean}
      */
@@ -328,8 +324,8 @@
 
     /**
      * Add class to element with vanilla JS
-     * @param {Object} el JavaScript element
-     * @param {String} cls Class name
+     * @param {Object} el - JavaScript element
+     * @param {String} cls - Class name
      * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
      */
     addClass: function(el, cls) {
@@ -341,8 +337,8 @@
 
     /**
      * Remove class from element with vanilla JS
-     * @param {Object} el JavaScript element
-     * @param {String} cls Class name
+     * @param {Object} el - JavaScript element
+     * @param {String} cls - Class name
      * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
      */
     removeClass: function(el, cls) {
@@ -357,9 +353,10 @@
      * @private
      * @param {Array|String} selector - Array, NodeList or DOM selector
      * @param {Function} callback
-     *   @param {Node} item - current looped item in callback
+     *   @param {Node} item - Current looped item
+     *   @param {Integer} index - Index of current looped item
      */
-    loopAndExecute: function(selector, callback) {
+    loop: function(selector, callback) {
       var items;
 
       if(selector.constructor === Array || selector.constructor === NodeList) {
@@ -369,7 +366,7 @@
       }
 
       for(var i = 0; i < items.length; i++) {
-        callback( items[i] );
+        callback( items[i], i );
       }
     },
 
