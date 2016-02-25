@@ -18,6 +18,8 @@
 })(window, function factory(window) {
   'use strict';
 
+  var custom_breakpoints;
+
   var defaults = {
     mobile_fps: true,
     breakpoints: null,
@@ -43,6 +45,36 @@
       large_down: ww < 1024,
       large: ww > 1024
     };
+  }
+
+    /**
+   * Set a callback that merges the default and original breakpoint listeners
+   * @private
+   * @param  {Integer} ww - Window width as called back in this.screenSizes
+   * @param  {Integer} wh - Window height as called back in this.screenSizes
+   * @see  this.screenSizes
+   * @return {Object}
+   */
+  function mergeBreakpoints(ww, wh) {
+    var breakpoints_combined = [defaultBreakpoints(ww, wh), custom_breakpoints(ww, wh)];
+
+    // Empty object to hold combined keys. Custom will override default if using same key
+    var new_breakpoints = {};
+
+    // Loop through both functions and their keys
+    for(var i = 0; i < breakpoints_combined.length; i++) {
+      var breakpoint_wrapper = breakpoints_combined[i];
+      var keys = Object.keys(breakpoint_wrapper);
+
+      for(var x = 0; x < keys.length; x++) {
+        var key = keys[x];
+
+        // Add to object
+        new_breakpoints[key] = breakpoint_wrapper[key];
+      }
+    }
+
+    return new_breakpoints;
   }
 
   /**
@@ -194,37 +226,7 @@
 
     // If we're merging the breakpoints, ensure breakpoints option object exists
     if(this.options.preserve_breakpoints && this.options.breakpoints) {
-      var custom_breakpoints = this.options.breakpoints;
-
-      /**
-       * Set a callback that merges the default and original breakpoint listeners
-       * @private
-       * @param  {Integer} ww - Window width as called back in this.screenSizes
-       * @param  {Integer} wh - Window height as called back in this.screenSizes
-       * @see  this.screenSizes
-       * @return {Object}
-       */
-      function mergeBreakpoints(ww, wh) {
-        var breakpoints_combined = [defaultBreakpoints(ww, wh), custom_breakpoints(ww, wh)];
-
-        // Empty object to hold combined keys. Custom will override default if using same key
-        var new_breakpoints = {};
-
-        // Loop through both functions and their keys
-        for(var i = 0; i < breakpoints_combined.length; i++) {
-          var breakpoint_wrapper = breakpoints_combined[i];
-          var keys = Object.keys(breakpoint_wrapper);
-
-          for(var x = 0; x < keys.length; x++) {
-            var key = keys[x];
-
-            // Add to object
-            new_breakpoints[key] = breakpoint_wrapper[key];
-          }
-        }
-
-        return new_breakpoints;
-      }
+      custom_breakpoints = this.options.breakpoints;
 
       // Set the callback
       this.breakpoints = mergeBreakpoints;
