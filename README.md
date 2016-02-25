@@ -10,11 +10,34 @@ P.S. The inline code documentation in this pup is rock solid.
 
 1. Copy `source/javascripts/frob_core_helpers.js` and `source/javascripts/frob_core.js` to your project.
 1. Apply the structure of `source/javascripts/application.js` to your project.
-1. Start Frob Core (usually in `application.js`): `;(function() { window.FCH = new FrobCoreHelpers(); })();`
+1. Start Frob Core (usually in `application.js`): `;(function() { window.FCH = new FrobCoreHelpers(FC); })();`
 
-Your base file (in this project it's `source/javascripts/frob_core.js`) must declare `var FC = {};`. If it doesn't, the core holder must be passed in initialization, i.e. `new FrobCoreHelpers()`.
+### Initialization and Options
 
-Nested functions can be declared via Frob Core's [hooks](#hooks).
+The core holder must be passed in as the first argument for initialization, i.e. `new FrobCoreHelpers(FC)`, but all other options are, fittingly, optional. These are passed in via object as the second argument, i.e. `new FrobCoreHelpers(FC, { ... })`.
+
+| Option | Type | Default | Description
+|---|---|---|---|
+| `mobile_fps` | boolean | true | Attach the scroll listener for `u-disable-hover` |
+| `breakpoints` | function | null | To set custom breakpoint, pass a function with two args and return a `string: boolean` object (example below) |
+| `preserve_breakpoints` | boolean | true | Merge custom breakpoints with [default breakpoints](#breakpoints). If false, value of `breakpoints` removes all default breakpoints |
+
+```javascript
+window.FCH = new FrobCoreHelpers({}, {
+  breakpoints: function(ww) {
+    return {
+      boot_size: ww < 12
+    };
+  },
+  preserve_breakpoints: false
+});
+
+// FCH.bp => { boot_size: <true|false> }
+```
+
+### Hooks
+
+Direct descendants of the core holder can access hooks using reserved property names. These are called automagically, avoiding declaring multiple event listeners on the `document` or `window`.
 
 ```javascript
 FC.ui = {
@@ -30,12 +53,7 @@ FC.ui = {
 };
 ```
 
-Direct descendants of `FC` have access to the [hooks](#hooks); grandchildren (i.e. `FC.ui.sliders`) should be initialized within a conditional in a `ready` or `load` hook. In extremely rare and special circumstances that should be treated as such, they can be initialized by manual addition, i.e. `FCH.ready.push(mySuperSliderInitialization)`.
-
-### Hooks
-
-Reserved functions on `FC` keys can be called automagically, avoiding declaring multiple event listeners on the `document` or `window`. For example,
-use the `resize` function to change the width of `.mydiv` to match the window's width.
+For example, use the `resize` function to change the width of `.mydiv` to match the window's width.
 
 ```javascript
 FC._ui = {
@@ -45,7 +63,7 @@ FC._ui = {
 };
 ```
 
-Hooks can also be added by adding a function to the appropriate `FCH` hook Arrays.
+Hooks can also be added by adding a function to the appropriate `FCH` array.
 
 ```javascript
 var sticky = function($el) {
@@ -61,7 +79,7 @@ FCH.scroll.push(sticky);
 | `ready` | DOMContentLoaded |
 | `load` | window onload |
 
-**Special Note**: Using `this` in a hook function will refer to the parent namespace.
+**Special Note**: Using `this` in a hook function will refer to the parent namespace, not `FrobCoreHelper`.
 
 ```javascript
 FC._ui = {
@@ -103,7 +121,7 @@ FC.nav_listeners = {
 
 ### Breakpoints
 
-Available from `FCH.bp`. Returns boolean.
+These defaults are available from `FCH.bp`. Returns boolean. They can be appended, overwritten, or removed entirely when declaring options.
 
 | Accessor | Description |
 |---|---|

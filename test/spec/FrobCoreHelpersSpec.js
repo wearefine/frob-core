@@ -6,6 +6,33 @@ describe('FCH', function() {
     FCH = new FrobCoreHelpers(FC);
   });
 
+  afterEach(function() {
+    FCH = null;
+  });
+
+  describe('initialization', function() {
+    describe('options', function() {
+      it('should have all the defaults set when nothing is passed', function() {
+        expect(FCH.options).toBeDefined();
+        expect(FCH.options.mobile_fps).toBeDefined();
+        expect(FCH.options.breakpoints).toBeDefined();
+        expect(FCH.options.preserve_breakpoints).toBeDefined();
+      });
+
+      it('should set default properties', function() {
+        expect(FCH.options.preserve_breakpoints).toBe(true);
+      });
+
+      it('should have properties set if partial properties are defined', function() {
+        FCH = new FrobCoreHelpers(FC, {mobile_fps: false});
+
+        expect(FCH.options.mobile_fps).toBe(false);
+        expect(FCH.options.breakpoints).toBeDefined();
+        expect(FCH.options.preserve_breakpoints).toBeDefined();
+      });
+    });
+  });
+
   describe('.setDefault()', function() {
 
     it('should be the default when variable is non-existent', function() {
@@ -76,7 +103,7 @@ describe('FCH', function() {
       el.className = 'squeaker';
       FCH.removeClass(el, 'squeaker');
 
-      expect(el.className.indexOf('squeaker')).toEqual( -1 );
+      expect(el.className).not.toContain('squeaker');
     });
 
   });
@@ -198,6 +225,47 @@ describe('FCH', function() {
       });
 
       expect(arr).toEqual( [2,3,4] );
+    });
+  });
+
+  describe('.bp', function() {
+    it('should have default breakpoints if no options are passed', function() {
+      // jasmine.any(Boolean) isn't applicable here
+      expect(typeof FCH.bp.small).toMatch('boolean');
+      expect(typeof FCH.bp.small_up).toMatch('boolean');
+      expect(typeof FCH.bp.medium_portrait).toMatch('boolean');
+      expect(typeof FCH.bp.medium).toMatch('boolean');
+      expect(typeof FCH.bp.large_down).toMatch('boolean');
+      expect(typeof FCH.bp.large).toMatch('boolean');
+    });
+
+    it('should include default breakpoints and custom breakpoints if preserve_breakpoints is true', function() {
+      FCH = new FrobCoreHelpers({}, {
+        breakpoints: function(ww) {
+          return {
+            boot_size: ww < 12
+          };
+        },
+        preserve_breakpoints: true
+      });
+
+      expect(FCH.bp.small).toBeDefined();
+      expect(FCH.bp.boot_size).toBeDefined();
+      expect(typeof FCH.bp.boot_size).toMatch('boolean');
+    });
+
+    it('should override default default breakpoints with custom breakpoints if preserve_breakpoints is false', function() {
+      FCH = new FrobCoreHelpers({}, {
+        breakpoints: function(ww) {
+          return {
+            boot_size: ww < 12
+          };
+        },
+        preserve_breakpoints: false
+      });
+
+      expect(FCH.bp.small).not.toBeDefined();
+      expect(FCH.bp.boot_size).toBeDefined();
     });
   });
 

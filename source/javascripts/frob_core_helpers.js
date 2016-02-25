@@ -1,3 +1,8 @@
+/*!
+ * FrobCoreHelpers v1.0
+ * A framework for front (frob) enders (tenders) everywhere
+ * MIT License
+ */
 
 (function (window, factory) {
   'use strict';
@@ -12,6 +17,55 @@
 
 })(window, function factory(window) {
   'use strict';
+
+  var defaults = {
+    mobile_fps: true,
+    breakpoints: null,
+    preserve_breakpoints: true
+  };
+
+  /**
+   * Holder for responsive breakpoints, set on load and reset on resize
+   * @property {Boolean} small - Window width is less than 768
+   * @property {Boolean} small_up - Window width is greater than 767
+   * @property {Boolean} medium_portrait - Window width is between 767 and 960
+   * @property {Boolean} medium - Window width is between 767 and 1025
+   * @property {Boolean} large_down - Window width is less than 1024
+   * @property {Boolean} large - Window width is greater than 1024
+   * @return {Object}
+   */
+  function defaultBreakpoints(ww) {
+    return {
+      small: ww < 768,
+      small_up: ww > 767,
+      medium_portrait: ww > 767 && ww < 960,
+      medium: ww > 767 && ww < 1025,
+      large_down: ww < 1024,
+      large: ww > 1024
+    };
+  }
+
+  /**
+   * Combine default options with custom ones
+   * @private
+   * @param  {Object} options - Key/value object to override `defaults` object
+   * @return {Object}
+   */
+  function applyDefaults(options) {
+    var default_keys = Object.keys(defaults);
+
+    // Loop through default params
+    for(var i = 0; i < default_keys.length; i++) {
+      var key = default_keys[i];
+
+      // If options does not have the default key, apply it
+      if(!options.hasOwnProperty(key)) {
+        options[key] = defaults[key];
+      }
+    }
+
+    return options;
+  }
 
   /**
    * Attach hooks on child objects to the listener arrays
@@ -100,18 +154,28 @@
   /**
    * Start everything up
    * @class
-   * @param {Object} [jsHolder=FC] - The main JavaScript object being queried; adds functionality for DOM callbacks to all children
+   * @param {Object} jsHolder - The main JavaScript object being queried; adds functionality for DOM callbacks to all children
+   * @param {Object} [options={}] - Custom options
+   *   @property {Boolean} [mobile_fps=true] - Attach the scroll listener for `u-disable-hover`
+   *   @property {Function} [breakpoints=null] - To set custom breakpoint, pass a function with two args and return a `string: boolean` object
+   *     @property {Integer} ww - Window width
+   *     @property {Integer} wh - Window height
+   *     @return {Object} - key is identifier, i.e. small; value is a comparison, i.e. ww < 767
+   *   @property {Boolean} [preserve_breakpoints=true] - Merge custom breakpoints with default breakpoints
    * @example
    * var FC = {
    *   ui: {
    *     resize: function() { ... }
    *   }
    * }
-   * FCH.init(FC);
+   * new FrobCoreHelpers(FC);
    * @return {FrobCoreHelpers}
    */
-  function FrobCoreHelpers(jsHolder) {
-    jsHolder = this.setDefault(jsHolder, {});
+  function FrobCoreHelpers(jsHolder, options) {
+    options = this.setDefault(options, {});
+
+    /** @type {Object} */
+    this.options = applyDefaults(options);
 
     /* Listener Arrays */
     /** @type {Array.<function>} */
@@ -128,10 +192,54 @@
     this.IE9 = this.isIE(9);
     this.anyIE = (this.IE10 || this.IE9);
 
-    this.breakpoints();
+    // If we're merging the breakpoints, ensure breakpoints option object exists
+    if(this.options.preserve_breakpoints && this.options.breakpoints) {
+      var custom_breakpoints = this.options.breakpoints;
 
-    this.resize.push( this.breakpoints.bind(this) );
-    this.ready.push( this.mobileFPS.bind(this) );
+      /**
+       * Set a callback that merges the default and original breakpoint listeners
+       * @private
+       * @param  {Integer} ww - Window width as called back in this.screenSizes
+       * @param  {Integer} wh - Window height as called back in this.screenSizes
+       * @see  this.screenSizes
+       * @return {Object}
+       */
+      function mergeBreakpoints(ww, wh) {
+        var breakpoints_combined = [defaultBreakpoints(ww, wh), custom_breakpoints(ww, wh)];
+
+        // Empty object to hold combined keys. Custom will override default if using same key
+        var new_breakpoints = {};
+
+        // Loop through both functions and their keys
+        for(var i = 0; i < breakpoints_combined.length; i++) {
+          var breakpoint_wrapper = breakpoints_combined[i];
+          var keys = Object.keys(breakpoint_wrapper);
+
+          for(var x = 0; x < keys.length; x++) {
+            var key = keys[x];
+
+            // Add to object
+            new_breakpoints[key] = breakpoint_wrapper[key];
+          }
+        }
+
+        return new_breakpoints;
+      }
+
+      // Set the callback
+      this.breakpoints = mergeBreakpoints;
+    } else {
+
+      // Fallback to the override or the default breakpoints
+      this.breakpoints =  this.options.breakpoints || defaultBreakpoints;
+    }
+
+    this.screenSizes();
+    this.resize.push( this.screenSizes.bind(this) );
+
+    if(this.options.mobile_fps) {
+      this.ready.push( this.mobileFPS.bind(this) );
+    }
 
     /* Cached jQuery variables */
     if(typeof jQuery !== 'undefined') {
@@ -271,12 +379,13 @@
 
     /**
      * Provides accessible booleans for fluctuating screensizes
+     * @sets this.dimensions
+     * @sets this.bp
+     * @fires this.breakpoints
      */
-    breakpoints: function() {
-      var ww, wh;
-
-      ww = window.innerWidth;
-      wh = window.innerHeight;
+    screenSizes: function() {
+      var ww = window.innerWidth;
+      var wh = window.innerHeight;
 
       /**
        * Dimensions
@@ -290,25 +399,7 @@
         wh: wh
       };
 
-      /**
-       * Breakpoints
-       * @namespace
-       * @description Holder for responsive breakpoints, set on load and reset on resize
-       * @property {Boolean} small - Window width is less than 768
-       * @property {Boolean} small_up - Window width is greater than 767
-       * @property {Boolean} medium_portrait - Window width is between 767 and 960
-       * @property {Boolean} medium - Window width is between 767 and 1025
-       * @property {Boolean} large_down - Window width is less than 1024
-       * @property {Boolean} large - Window width is greater than 1024
-       */
-      this.bp = {
-        small: ww < 768,
-        small_up: ww > 767,
-        medium_portrait: ww > 767 && ww < 960,
-        medium: ww > 767 && ww < 1025,
-        large_down: ww < 1024,
-        large: ww > 1024
-      };
+      this.bp = this.breakpoints.call(null, ww, wh);
     },
 
     /**
