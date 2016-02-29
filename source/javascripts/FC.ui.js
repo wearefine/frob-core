@@ -1,23 +1,25 @@
 /*globals FCH, FC */
 
-'use strict';
+(function() {
+  'use strict';
 
-FC.ui = {
+  FC.ui = {
 
-  ready: function() {
-    /*
-    if(FCH.exists('.js-slider')) {
-      this.mySuperSliderInitialization();
+    ready: function() {
+      /*
+      if(FCH.exists('.js-slider')) {
+        this.mySuperSliderInitialization();
+      }
+      */
+    },
+
+    resize: function() {
+      // console.log('Resized');
+    },
+
+    scroll: function() {
+      // console.log('Scroll');
     }
-    */
-  },
 
-  resize: function() {
-    // console.log('Resized');
-  },
-
-  scroll: function() {
-    // console.log('Scroll');
-  }
-
-};
+  };
+})();
