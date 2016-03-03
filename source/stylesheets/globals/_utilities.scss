@@ -58,3 +58,18 @@
 .clearfix {
   @include clearfix;
 }
+
+
+// icon selector loop
+$icon-symbols: (
+  ico-: '',
+); $icons: map-keys($icon-symbols);
+
+@each $icon in $icons {
+  .#{$icon} {
+    &:before {
+      content: '#{map-get($icon-symbols, $icon)}';
+      @include icomoon;
+    }
+  }
+}
