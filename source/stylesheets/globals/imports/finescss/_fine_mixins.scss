@@ -109,29 +109,6 @@
   }
 }
 
-
-// Return a negative integer of the supplied value
-@function negate($integer) {
-  @if $integer > 0 {
-    @return 0 - $integer;
-  } @else {
-    @return $integer;
-  }
-}
-
-// Z-index function: comma-separated list and item taken
-// http://www.smashingmagazine.com/2014/06/12/sassy-z-index-management-for-complex-layouts/
-@function z($list, $element) {
-  $z-index: index($list, $element);
-
-  @if $z-index {
-    @return $z-index;
-  }
-
-  @warn "There is no item '#{$element}' in this list; choose one of: #{$list}";
-  @return null;
-}
-
 // Throw it your list of css classes without periods and it'll return a z-index or nothing at all if the parent selector is not in the list
 // @example
 //   $list: (
@@ -157,30 +134,6 @@
   @if $z {
     z-index: $z;
   }
-}
-
-
-// Taken
-// from
-// Foundation
-@function emCalc($pxWidth) {
-  @return $pxWidth / $em-base * 1em;
-}
-@function remCalc($pxWidth) {
-  @return $pxWidth / $em-base * 1rem;
-}
-
-// Helper for finding value in a faux sass hash -- i.e. a list
-// http://hugogiraudel.com/2013/08/12/sass-functions/
-@function match($collection, $value) {
-  @each $item in $collection {
-    $index: index($item, $value);
-    @if $index {
-      $return: if($index == 1, 2, $index);
-      @return nth($item, $return);
-    }
-  }
-  @return false;
 }
 
 // Media Query Fun
