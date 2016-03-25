@@ -518,11 +518,10 @@
      * Check for external links, set target blank if external
      */
     blankit: function() {
-      var links = document.getElementsByTagName('a'),
-          pattern = new RegExp(/^http/);
+      var links = document.getElementsByTagName('a');
 
       for (var i = 0; i < links.length; i++) {
-        if ( pattern.test(links[i].getAttribute('href')) ) {
+        if ( /^http/.test(links[i].getAttribute('href')) ) {
           links[i].setAttribute('target', '_blank');
         }
       }
