@@ -279,4 +279,26 @@ describe('FCH', function() {
 
   // });
 
+  describe('.blankit', function() {
+    it('should add a target="_blank" attribute to all external links', function() {
+      var el1 = document.createElement('a'),
+          el2 = document.createElement('a'),
+          el3 = document.createElement('a');
+
+      el1.setAttribute('href', '/relative/path');
+      el2.setAttribute('href', 'https://externalurl.com');
+      el3.setAttribute('href', '/blog/post-about-http');
+
+      document.body.appendChild(el1);
+      document.body.appendChild(el2);
+      document.body.appendChild(el3);
+
+      FCH.blankit();
+
+      expect(el1.hasAttribute('target')).toBe(false);
+      expect(el2.hasAttribute('target')).toBe(true);
+      expect(el3.hasAttribute('target')).toBe(false);
+    });
+  });
+
 });
