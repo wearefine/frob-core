@@ -42,9 +42,9 @@
 
     @if ($direction == bottom) {
       top: 100%;
-      left: 0;
+      left: 50%;
       border-top-color: $color;
-      border-width: $size $size 0 0;
+      margin-left: negate($size);
     }
 
     @if ($direction == left) {
