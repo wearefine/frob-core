@@ -1,4 +1,5 @@
 // FINE Standard Breakpoints
+// ie-10-11 breakpoint courtesy http://paper-leaf.com/blog/2014/09/targeting-ie-10-11-browsers-css/
 $fine-breakpoints: (
   'small'           : ( min-width:  421px ),
   'small-down'      : ( max-width:  420px ),
@@ -13,6 +14,7 @@ $fine-breakpoints: (
   'retina'          : unquote('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)'),
   'portrait'        : unquote('only screen and (orientation: portrait)'),
   'landscape'       : unquote('only screen and (orientation: landscape)'),
+  'ie-10-11'        : unquote('only screen and (-ms-high-contrast: active), (-ms-high-contrast: none)')
 );
 
 // Project $breakpoints map to guard against deletion in project _variables
