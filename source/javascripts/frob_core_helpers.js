@@ -442,6 +442,29 @@
     },
 
     /**
+     * Toggles class on element with vanilla JS
+     * @param {Object} el - JavaScript element
+     * @param {String} cls - Class name
+     * @see {@link http://youmightnotneedjquery.com/#toggle_class}
+     */
+    toggleClass: function(el, cls) {
+      if (el.classList) {
+        el.classList.toggle(cls);
+      } else {
+        var classes = el.className.split(' ');
+        var existingIndex = classes.indexOf(cls);
+
+        if (existingIndex >= 0) {
+          classes.splice(existingIndex, 1);
+        } else {
+          classes.push(cls);
+        }
+
+        el.className = classes.join(' ');
+      }
+    },
+
+    /**
      * Goes through all elements and performs function for each item
      * @private
      * @param {Array|String} selector - Array, NodeList or DOM selector
