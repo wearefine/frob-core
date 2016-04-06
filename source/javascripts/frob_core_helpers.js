@@ -424,7 +424,12 @@
     addClass: function(el, cls) {
       if (!this.hasClass(el, cls)) {
         el.className = el.className.trim();
-        el.className += ' ' + cls;
+
+        if (el.className.length === 0) {
+          el.className = cls;
+        } else {
+          el.className += ' ' + cls;
+        }
       }
     },
 

@@ -147,7 +147,7 @@ describe('FCH', function() {
       var el = document.createElement('div');
       FCH.addClass(el, 'squeaker');
 
-      expect(el.className).toEqual(' squeaker');
+      expect(el.className).toEqual('squeaker');
     });
 
   });
