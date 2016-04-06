@@ -106,6 +106,14 @@ describe('FCH', function() {
       expect(el.className).not.toContain('squeaker');
     });
 
+    it('should keep other class names when removing class and trim ending whitespace', function() {
+      var el = document.createElement('div');
+      el.className = 'foo bar';
+      FCH.removeClass(el, 'bar');
+
+      expect(el.className).toEqual('foo');
+    });
+
   });
 
   describe('.addClass()', function() {

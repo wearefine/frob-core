@@ -437,7 +437,7 @@
     removeClass: function(el, cls) {
       if (this.hasClass(el, cls)) {
         var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-        el.className = el.className.replace(reg, ' ');
+        el.className = el.className.replace(reg, ' ').trim();
       }
     },
 
@@ -448,19 +448,10 @@
      * @see {@link http://youmightnotneedjquery.com/#toggle_class}
      */
     toggleClass: function(el, cls) {
-      if (el.classList) {
-        el.classList.toggle(cls);
+      if ( this.hasClass(el, cls) ) {
+        this.removeClass(el, cls);
       } else {
-        var classes = el.className.split(' ');
-        var existingIndex = classes.indexOf(cls);
-
-        if (existingIndex >= 0) {
-          classes.splice(existingIndex, 1);
-        } else {
-          classes.push(cls);
-        }
-
-        el.className = classes.join(' ');
+        this.addClass(el, cls);
       }
     },
 
