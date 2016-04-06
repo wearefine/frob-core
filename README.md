@@ -166,6 +166,50 @@ function(required_value, missing_value) {
 }
 ```
 
+### addClass
+
+`addClass` adds a class to an element with vanilla JS.
+
+| Param | Description |
+|---|---|
+| `element` | JS Object |
+| `class` | String of class to be added |
+
+```javascript
+var el = document.createElement('div');
+FCH.addClass(el, 'foo'); // el.className is now "foo"
+```
+
+### removeClass
+
+`removeClass` removes a class to an element with vanilla JS if the element already has that class.
+
+| Param | Description |
+|---|---|
+| `element` | JS Object |
+| `class` | String of class to be removed |
+
+```javascript
+var el = document.createElement('div');
+el.className = 'foo';
+FCH.removeClass(el, 'foo'); // el.className is now ""
+```
+
+### toggleClass
+
+`toggleClass` adds a class to an element with vanilla JS if the element does not already have the class, removes the class if it does.
+
+| Param | Description |
+|---|---|
+| `element` | JS Object |
+| `class` | String of class to be toggled |
+
+```javascript
+var el = document.createElement('div');
+FCH.toggleClass(el, 'foo'); // el.className is now "foo"
+FCH.toggleClass(el, 'foo'); // el.className is now ""
+```
+
 ### Loops
 
 `loop` saves characters on `for` loops.
