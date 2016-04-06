@@ -486,7 +486,14 @@
      * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
      */
     removeClass: function(el, cls) {
+<<<<<<< c71b3aa9b6f35ea51a96dfa1a371101c8b76f23d
       return removeClass(el, cls)
+=======
+      if (this.hasClass(el, cls)) {
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+        el.className = el.className.replace(reg, ' ').trim();
+      }
+>>>>>>> update toggleClass function to utilize FCH hasClass, addClass, and removeClass functions. add trim() to end of removeClass function. update removeClass test
     },
 
     /**
@@ -496,19 +503,10 @@
      * @see {@link http://youmightnotneedjquery.com/#toggle_class}
      */
     toggleClass: function(el, cls) {
-      if (el.classList) {
-        el.classList.toggle(cls);
+      if ( this.hasClass(el, cls) ) {
+        this.removeClass(el, cls);
       } else {
-        var classes = el.className.split(' ');
-        var existingIndex = classes.indexOf(cls);
-
-        if (existingIndex >= 0) {
-          classes.splice(existingIndex, 1);
-        } else {
-          classes.push(cls);
-        }
-
-        el.className = classes.join(' ');
+        this.addClass(el, cls);
       }
     },
 
