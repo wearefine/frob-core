@@ -486,14 +486,7 @@
      * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
      */
     removeClass: function(el, cls) {
-<<<<<<< c71b3aa9b6f35ea51a96dfa1a371101c8b76f23d
       return removeClass(el, cls)
-=======
-      if (this.hasClass(el, cls)) {
-        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-        el.className = el.className.replace(reg, ' ').trim();
-      }
->>>>>>> update toggleClass function to utilize FCH hasClass, addClass, and removeClass functions. add trim() to end of removeClass function. update removeClass test
     },
 
     /**
