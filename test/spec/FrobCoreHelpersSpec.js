@@ -144,6 +144,39 @@ describe('FCH', function() {
 
   });
 
+  describe('.toggleClass()', function() {
+    it('should remove class if element already has class', function() {
+      var el = document.createElement('div');
+      el.className = 'foo';
+      FCH.toggleClass(el, 'foo');
+
+      expect(el.className).toEqual('');
+    });
+
+    it('should add class if element does not have class', function() {
+      var el = document.createElement('div');
+      FCH.toggleClass(el, 'foo');
+
+      expect(el.className).toEqual('foo');
+    });
+
+    it('should keep other class names when adding a class', function() {
+      var el = document.createElement('div');
+      el.className = 'foo bar';
+      FCH.toggleClass(el, 'baz');
+
+      expect(el.className).toEqual('foo bar baz');
+    });
+
+    it('should keep other class names when removing a class', function() {
+      var el = document.createElement('div');
+      el.className = 'foo bar baz';
+      FCH.toggleClass(el, 'baz');
+
+      expect(el.className).toEqual('foo bar');
+    });
+  });
+
   describe('localStorage adapter', function() {
     beforeEach(function() {
       localStorage.clear();
