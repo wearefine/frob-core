@@ -245,6 +245,8 @@
   function FrobCoreHelpers(jsHolder, options) {
     options = this.setDefault(options, {});
 
+    var dimensionsBreakpointsListener = this.screenSizes();
+
     /** @type {Object} */
     this.options = applyDefaults(options);
 
@@ -275,7 +277,9 @@
       this.breakpoints =  this.options.breakpoints || defaultBreakpoints;
     }
 
-    this.screenSizes();
+    // Init this.dimensions and this.bp
+    dimensionsBreakpointsListener();
+    this.resize.push( dimensionsBreakpointsListener );
 
     if(this.options.mobile_fps) {
       this.scroll.push( this.mobileFPS() );
@@ -424,27 +428,23 @@
      * @fires this.breakpoints
      */
     screenSizes: function() {
-      var ww = window.innerWidth;
-      var wh = window.innerHeight;
+      var _this = this;
 
-      /**
-       * dimensions
-       * @namespace
-       * @description Holder for screen size numbers, set on load and reset on resize
-       * @property {Number} ww - Window width
-       * @property {Number} wh - Window height
-       */
-      Object.defineProperty(this, 'dimensions', {
-        get: function() {
-          return {
-            ww: window.innerWidth,
-            wh: window.innerHeight
-          }
-        },
+      return function() {
+        var ww = window.innerWidth;
+        var wh = window.innerHeight;
 
-        // Noop, psuedo-readonly
-        set: function() {}
-      });
+        /**
+         * dimensions
+         * @namespace
+         * @description Holder for screen size numbers, set on load and reset on resize
+         * @property {Number} ww - Window width
+         * @property {Number} wh - Window height
+         */
+        _this.dimensions = {
+          ww: ww,
+          wh: wh
+        };
 
       /**
        * bp
@@ -454,14 +454,8 @@
        * @see {@link defaultBreakpoints}
        * @see {@link mergeBreakpoints}
        */
-      Object.defineProperty(this, 'bp', {
-        get: function() {
-          return this.breakpoints.call(null, ww, wh);
-        },
-
-        // Noop
-        set: function() {}
-      });
+        _this.bp = _this.breakpoints.call(null, ww, wh);
+      };
     },
 
     /**
