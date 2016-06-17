@@ -296,6 +296,24 @@ Put a block of content within a media breakpoint using the list defined in `_bre
 }
 ```
 
+To use a custom set of breakpoints, pass the list in the second argument (default is `$breakpoints`). 
+
+```scss
+$tweakpoints: (
+  'really-specific-nav-size': ( min-width: 438px )
+);
+@include bp(really-specific-nav-size, $tweakpoints) { ... }
+```
+
+Multiple breakpoints can be combined with an [arglist](https://www.sitepoint.com/sass-multiple-arguments-lists-or-arglist/) starting at the third argument. *Note that proper order should be obeyed and will not be automatically corrected (i.e. including `print` or `screen` as the third argument).*
+
+```scss
+.narrow-print {
+  // Prints `@media only print and (min-width: 421px) and (max-width: 767px)`
+  @include bp(print, $breakpoints, small, medium-down) { ... }
+}
+```
+
 #### triangle
 
 Apply a CSS triangle to an element.
