@@ -206,8 +206,9 @@
    */
   function addClass(el, cls) {
     if (!hasClass(el, cls)) {
+      var clsToAdd = !!el.className ? ' ' + cls : cls;
       el.className = el.className.trim();
-      el.className += ' ' + cls;
+      el.className += clsToAdd;
     }
   }
 
@@ -218,7 +219,7 @@
   function removeClass(el, cls) {
     if (hasClass(el, cls)) {
       var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-      el.className = el.className.replace(reg, ' ');
+      el.className = el.className.replace(reg, ' ').trim();
     }
   }
 
@@ -487,6 +488,20 @@
      */
     removeClass: function(el, cls) {
       return removeClass(el, cls)
+    },
+
+    /**
+     * Toggles class on element with vanilla JS
+     * @param {Object} el - JavaScript element
+     * @param {String} cls - Class name
+     * @see {@link http://youmightnotneedjquery.com/#toggle_class}
+     */
+    toggleClass: function(el, cls) {
+      if ( this.hasClass(el, cls) ) {
+        this.removeClass(el, cls);
+      } else {
+        this.addClass(el, cls);
+      }
     },
 
     /**
