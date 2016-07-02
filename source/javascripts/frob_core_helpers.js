@@ -206,8 +206,9 @@
    */
   function addClass(el, cls) {
     if (!hasClass(el, cls)) {
+      var clsToAdd = !!el.className ? ' ' + cls : cls;
       el.className = el.className.trim();
-      el.className += ' ' + cls;
+      el.className += clsToAdd;
     }
   }
 
@@ -218,7 +219,7 @@
   function removeClass(el, cls) {
     if (hasClass(el, cls)) {
       var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-      el.className = el.className.replace(reg, ' ');
+      el.className = el.className.replace(reg, ' ').trim();
     }
   }
 
