@@ -1,3 +1,10 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
+env:
+  global:
+    secure: VLPg/z20B0lvbn8HBDnfwrc5IypQbc74Y02XkLvNY2D49SFDJTe5vrmK7aBdxONLroYPzljkUQhEgAgPsp3nAHOarrrpB1ylhMGwL6xi0gmTlgHqg0J6nOIrOIMDGao58UCMlStIIVy/73j7TLe1IQcvEhgnBcuDyGi/HMJe4VIjBb7Bf+OmXGj2f5odVW453roRhVOcMpnnaEYKwhAgtKPSugE4s4KnCgtm79HXmngyH6d8uCtc5T4e5cRumK/w/xVt6t47L3gjaOAvMguNxAYDVnorsvINvExoXd0KQqrTvByevrApUUQ+I0yJZ5/JMPWWPTRJvxOkWd5RCX8V9gP7Gxl+ItAhDh28CSScoLly6ca9I8BLACDsFXnijC2bSiUc4ZHhWjr50k3+6CTVVK6V0LeQx0TATfKeOLArXQv4jyAZKo9bIl9YaeJt9OswUZagdwP9PT59+/rXx9ICAMmALCt5cYU/bC77t6PFTD8M1K3Bw/OKs8b2nnxnjeoNmBqAMf/16Q95n48Fmhlo0a+5tTDxoR6sOkCKN+Jqqw/Ne3j52M9dTfRevu70n+q+cHvepSq7c60rloHWLzQElSX5UhNAAtEA2l7LjEZbTscndzxZQlYQzoCRf3RdVbazdqGtRkkl49PQ9bWY1oHdLEToP8+GgpDoseEaIP0G74g=
+
+after_success:
+- chmod ugo+x notify.sh
+- '[ "${TRAVIS_PULL_REQUEST}" != "false" ] || ./notify.sh'

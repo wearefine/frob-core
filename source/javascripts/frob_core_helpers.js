@@ -1,5 +1,5 @@
 /*!
- * FrobCoreHelpers v1.0
+ * FrobCoreHelpers v1.1
  * A framework for front (frob) enders (tenders) everywhere
  * MIT License
  */
@@ -49,10 +49,10 @@
 
     /**
    * Set a callback that merges the default and original breakpoint listeners
-   * @private
+   * @protected
    * @param  {Integer} ww - Window width as called back in this.screenSizes
    * @param  {Integer} wh - Window height as called back in this.screenSizes
-   * @see  this.screenSizes
+   * @see  FrobCoreHelpers#screenSizes
    * @return {Object}
    */
   function mergeBreakpoints(ww, wh) {
@@ -168,6 +168,7 @@
    */
   function attachListeners() {
     var listener = 'optimized';
+    var _this = this;
 
     // Optimized fires a more effective listener but the method isn't supported in all browsers
     if(typeof CustomEvent === 'function') {
@@ -177,10 +178,49 @@
       listener = '';
     }
 
-    window.addEventListener(listener + 'scroll', callListener.bind(this, 'scroll') );
-    window.addEventListener(listener + 'resize', callListener.bind(this, 'resize') );
-    document.addEventListener('DOMContentLoaded', callListener.bind(this, 'ready') );
-    window.addEventListener('load', callListener.bind(this, 'load') );
+    window.addEventListener(listener + 'scroll', function() {
+      callListener.call(_this, 'scroll');
+    });
+    window.addEventListener(listener + 'resize', function() {
+      callListener.call(_this, 'resize');
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      callListener.call(_this, 'ready');
+    });
+    window.addEventListener('load', function() {
+      callListener.call(_this, 'load');
+    });
+  }
+
+  /**
+   * @private
+   * @see {@link FrobCoreHelpers#hasClass documentation in the public `hasClass` function}
+   */
+  function hasClass(el, cls) {
+    return !!el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+  }
+
+  /**
+   * @private
+   * @see {@link FrobCoreHelpers#addClass documentation in the public `addClass` function}
+   */
+  function addClass(el, cls) {
+    if (!hasClass(el, cls)) {
+      var clsToAdd = !!el.className ? ' ' + cls : cls;
+      el.className = el.className.trim();
+      el.className += clsToAdd;
+    }
+  }
+
+  /**
+   * @private
+   * @see {@link FrobCoreHelpers#removeClass documentation in the public `removeClass` function}
+   */
+  function removeClass(el, cls) {
+    if (hasClass(el, cls)) {
+      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+      el.className = el.className.replace(reg, ' ').trim();
+    }
   }
 
   /**
@@ -205,6 +245,8 @@
    */
   function FrobCoreHelpers(jsHolder, options) {
     options = this.setDefault(options, {});
+
+    var dimensionsBreakpointsListener = this.screenSizes();
 
     /** @type {Object} */
     this.options = applyDefaults(options);
@@ -236,11 +278,12 @@
       this.breakpoints =  this.options.breakpoints || defaultBreakpoints;
     }
 
-    this.screenSizes();
-    this.resize.push( this.screenSizes.bind(this) );
+    // Init this.dimensions and this.bp
+    dimensionsBreakpointsListener();
+    this.resize.push( dimensionsBreakpointsListener );
 
     if(this.options.mobile_fps) {
-      this.ready.push( this.mobileFPS.bind(this) );
+      this.scroll.push( this.mobileFPS() );
     }
 
     /* Cached jQuery variables */
@@ -380,28 +423,40 @@
     },
 
     /**
-     * Provides accessible booleans for fluctuating screensizes
+     * Provides accessible booleans for fluctuating screensizes; only fire when queried
      * @sets this.dimensions
      * @sets this.bp
      * @fires this.breakpoints
      */
     screenSizes: function() {
-      var ww = window.innerWidth;
-      var wh = window.innerHeight;
+      var _this = this;
+
+      return function() {
+        var ww = window.innerWidth;
+        var wh = window.innerHeight;
+
+        /**
+         * dimensions
+         * @namespace
+         * @description Holder for screen size numbers, set on load and reset on resize
+         * @property {Number} ww - Window width
+         * @property {Number} wh - Window height
+         */
+        _this.dimensions = {
+          ww: ww,
+          wh: wh
+        };
 
       /**
-       * Dimensions
+       * bp
        * @namespace
-       * @description Holder for screen size numbers, set on load and reset on resize
-       * @property {Number} ww - Window width
-       * @property {Number} wh - Window height
+       * @description Sets boolean values for screen size ranges
+       * @fires this.breakpoints
+       * @see {@link defaultBreakpoints}
+       * @see {@link mergeBreakpoints}
        */
-      this.dimensions = {
-        ww: ww,
-        wh: wh
+        _this.bp = _this.breakpoints.call(null, ww, wh);
       };
-
-      this.bp = this.breakpoints.call(null, ww, wh);
     },
 
     /**
@@ -412,7 +467,7 @@
      * @return {Boolean}
      */
     hasClass: function(el, cls) {
-      return !!el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+      return hasClass(el, cls);
     },
 
     /**
@@ -422,15 +477,7 @@
      * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
      */
     addClass: function(el, cls) {
-      if (!this.hasClass(el, cls)) {
-        el.className = el.className.trim();
-
-        if (el.className.length === 0) {
-          el.className = cls;
-        } else {
-          el.className += ' ' + cls;
-        }
-      }
+      return addClass(el, cls);
     },
 
     /**
@@ -440,10 +487,7 @@
      * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
      */
     removeClass: function(el, cls) {
-      if (this.hasClass(el, cls)) {
-        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-        el.className = el.className.replace(reg, ' ').trim();
-      }
+      return removeClass(el, cls)
     },
 
     /**
@@ -491,16 +535,14 @@
       var body = document.getElementsByTagName('body')[0];
 
       function allowHover() {
-        return this.removeClass(body, 'u-disable_hover');
-      };
+        return removeClass(body, 'u-disable_hover');
+      }
 
-      function FPSScroll() {
+      return function() {
         clearTimeout(scroll_timer),
-        this.hasClass(body, 'u-disable_hover') || this.addClass(body, 'u-disable_hover'),
-        scroll_timer = setTimeout(allowHover.bind(this), 500 );
+        hasClass(body, 'u-disable_hover') || addClass(body, 'u-disable_hover'),
+        scroll_timer = setTimeout(allowHover, 500 );
       };
-
-      this.scroll.push( FPSScroll.bind(this) );
     },
 
     /**
