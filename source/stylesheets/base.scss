@@ -1,6 +1,6 @@
 // Imports
 @import
-  'globals/imports/finescss/fine',
+  'finescss/fine',
   'globals/imports/variables',
   'globals/imports/functions',
   'globals/imports/mixins',
@@ -9,12 +9,13 @@
 
 // Globals
 @import
-  'globals/query_order',
+  'finescss/query_order',
   'globals/type/typography',
   'globals/tags',
   'globals/type/headings',
+  'finescss/icon',
   'globals/type/icons',
-  'globals/utilities'
+  'finescss/utilities'
 ;
 
 // Layout
