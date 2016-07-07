@@ -23,34 +23,34 @@ gulp.task('vendor', function() {
 });
 
 gulp.task('scss', function() {
-  return gulp.src('source/assets/stylesheets/*.scss')
+  return gulp.src('source/stylesheets/**/*.scss')
     .pipe(
       sass( {
-        includePaths: ['source/assets/stylesheets'],
+        includePaths: ['source/stylesheets'],
         errLogToConsole: true
       } ) )
     .pipe( autoprefixer('last 2 versions') )
-    .pipe( gulp.dest('dist/stylesheets/') )
+    .pipe( gulp.dest('dist/') )
 });
 
 gulp.task('css', ['vendor', 'scss'], function() {
   return gulp.src(
       [
-        'dist/stylesheets/vendor.css',
-        'dist/stylesheets/base.css'
+        'dist/vendor.css',
+        'dist/base.css'
       ],
       { base: 'dist/' }
     )
     .pipe( csso() )
     .pipe( concat('application.min.css') )
-    .pipe( gulp.dest('dist/stylesheets/') )
+    .pipe( gulp.dest('dist/') )
 });
 
 gulp.task('js', function() {
-  return gulp.src('source/assets/javascripts/*.js')
+  return gulp.src('source/javascripts/*.js')
     // .pipe( uglify().on('error', gutil.log) )
     .pipe( concat('application.js') )
-    .pipe( gulp.dest('dist/javascripts/') )
+    .pipe( gulp.dest('dist/') )
 });
 
 gulp.task('templates', function() {

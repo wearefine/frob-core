@@ -284,7 +284,7 @@ $f-content: $f-opensans;
 
 #### hover
 
-Quick shortcut for `&:hover { ... }` accepts color or block.
+Quick shortcut for `&:hover { ... }`. Accepts color value or block.
 
 ```scss
 @include hover($c-white)
@@ -329,7 +329,14 @@ If you want to name your ordered list different from your classes, pass a key as
 
 #### bp
 
-Put a block of content within a media breakpoint using the list defined in `_breakpoints.scss`.
+
+| Param | Accepts | Default |
+|---|---|---|
+| `$name` | string | required |
+| `$breakpoint_list` | map | `$breakpoints` |
+| `$additional_breakpoints` | arglist<string> | `null` |
+
+Put a block of content within a media breakpoint using the `$breakpoints` list defined in `_variables.scss`.
 
 ```scss
 .show--mobile {
@@ -377,7 +384,7 @@ Apply a CSS triangle to an element.
 
 #### placeholder
 
-Pass a block to apply properties to input placeholder styles. Strongly recommended to be used only at root-level.
+Pass a block to apply properties to input placeholder styles. Strongly recommended to be used only at root-level. Accepts block.
 
 ```scss
 @include placeholder {
@@ -388,7 +395,7 @@ Pass a block to apply properties to input placeholder styles. Strongly recommend
 
 #### ie
 
-Target specific Internet Explorer versions, and optionally pass in a version number. **Only use this mixin as a last resort. Feature detection is strongly preferred.**
+Target specific Internet Explorer versions, and optionally pass in a version number. **Only use this mixin as a last resort. Feature detection is strongly preferred.** Accepts block.
 
 ```scss
 .animated-element {
@@ -399,7 +406,7 @@ Target specific Internet Explorer versions, and optionally pass in a version num
 
 #### touch
 
-Target touch devices using [Modernizr](http://v3.modernizr.com/download/#-backgroundcliptext-canvas-canvastext-cssfilters-cssgradients-csspositionsticky-cssremunit-csstransforms-csstransforms3d-csstransitions-cssvhunit-flexbox-flexboxlegacy-flexboxtweener-inlinesvg-localstorage-picture-preserve3d-srcset-svgclippaths-svgfilters-touchevents-cssclasses-dontmin).
+Target touch devices using [Modernizr](http://v3.modernizr.com/download/#-backgroundcliptext-canvas-canvastext-cssfilters-cssgradients-csspositionsticky-cssremunit-csstransforms-csstransforms3d-csstransitions-cssvhunit-flexbox-flexboxlegacy-flexboxtweener-inlinesvg-localstorage-picture-preserve3d-srcset-svgclippaths-svgfilters-touchevents-cssclasses-dontmin). Accepts block.
 
 ```scss
 .nav {
@@ -474,6 +481,20 @@ Invert a number.
 ```scss
 .upside-down {
   top: negate(10px);
+}
+```
+
+#### gray
+
+Use a gray color from the `$grays` map.
+
+```scss
+$grays: (
+  30: #777
+);
+
+a {
+  color: gray(30); // #777
 }
 ```
 

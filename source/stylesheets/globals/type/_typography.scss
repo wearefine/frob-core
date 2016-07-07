@@ -1,0 +1,21 @@
+// This file should only include palceholder selectors with font-related properties
+
+%heading-1 {
+  font-size: 44px;
+}
+
+%heading-2 {
+  font-size: 32px;
+}
+
+%heading-3 {
+  font-size: 24px;
+}
+
+%heading-4 {
+  font-size: 18px;
+}
+
+%content {
+  font-family: $f-content;
+}
