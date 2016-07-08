@@ -10,24 +10,44 @@
     box-sizing: border-box;
   }
 }
+
 html {
   // scss-lint:disable DuplicateProperty
   font-size: 100%;
   font-size: remCalc(16px);
   height: 100%;
 }
+
 body {
   height: 100%;
   font-size: 1rem;
   line-height: 1.4;
   position: relative;
   width: 100%;
+  font-family: $f-content;
 }
-img {
+
+img,
+svg {
   height: auto;
   max-width: 100%;
 }
+
 a {
   transition: color 0.2s;
   text-decoration: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+p {
+  @extend %content;
+  margin: 0 0 20px;
+}
+
+picture {
+  display: block;
 }

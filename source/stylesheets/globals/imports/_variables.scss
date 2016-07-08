@@ -8,13 +8,7 @@ $breakpoints: ();
 // Merge $fine_breakpoints and $breakpoints to use with bp() mixin
 $breakpoints: map-merge($fine-breakpoints, $breakpoints);
 
-//Default colors (doesn't really need to be changed)
-$c-gray: #777;
-$c-lightest_gray: #f3f3f3;
-$c-light_gray: lighten($c-gray, 28%);
-$c-dark_gray: #a2a2a2;
+$c-gray: gray(30);
 
 $f-headline: $f-sans;
 $f-content: $f-serif;
-
-

@@ -1,21 +1,26 @@
-
-// Modules
+// Imports
 @import
-  'globals/imports/finescss/fine',
+  'finescss/fine',
   'globals/imports/variables',
-  'globals/imports/mixins'
+  'globals/imports/functions',
+  'globals/imports/mixins',
+  'globals/imports/extends'
 ;
 
 // Globals
 @import
-  'globals/query_order',
+  'finescss/query_order',
+  'globals/type/typography',
   'globals/tags',
-  'globals/utilities',
-  'globals/typography'
+  'globals/type/headings',
+  'finescss/icon',
+  'globals/type/icons',
+  'finescss/utilities'
 ;
 
 // Layout
 @import
+  'globals/layouts/grid',
   'globals/layouts/header',
   'globals/layouts/footer'
 ;
@@ -23,8 +28,3 @@
 // Blocks
 
 // Views
-
-// Overrides
-@import
-  'globals/overrides'
-;

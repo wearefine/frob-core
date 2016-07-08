@@ -1,0 +1,25 @@
+h1,
+h2,
+h3,
+h4 {
+  font-family: $f-headline;
+  line-height: 1.1;
+  font-weight:normal;
+  margin: 0 0 20px;
+}
+
+h1 {
+  @extend %heading-1;
+}
+
+h2 {
+  @extend %heading-2;
+}
+
+h3 {
+  @extend %heading-3;
+}
+
+h4 {
+  @extend %heading-4;
+}
