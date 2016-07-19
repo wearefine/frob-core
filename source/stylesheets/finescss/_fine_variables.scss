@@ -28,6 +28,9 @@ $f-script: Brush Script MT, Trebuchet MS, 'Helvetica Neue', Helvetica, Arial, sc
 $f-monospace: 'Bitstream Vera Sans Mono', Consolas, Monaco, Menlo, 'Andale Mono', monospace;
 $f-international: 'Microsoft YaHei New', 'Microsoft Yahei', '微软雅黑', 宋体, SimSun, STXihei, '华文细黑', 'MS PGothic', $f-sans;
 
+$f-unicode-latin-ext: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+$f-unicode-latin: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+
 $c-white: #fff;
 $c-black: #000;
 
