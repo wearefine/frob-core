@@ -1,5 +1,5 @@
 /*!
- * FrobCoreHelpers v1.1
+ * FrobCoreHelpers v2.0
  * A framework for front (frob) enders (tenders) everywhere
  * MIT License
  */
@@ -27,7 +27,50 @@
   };
 
   /**
+   * Generate a callback holder
+   * @class
+   * @private
+   * @param {String} name - moniker for the hook, e.g. 'ready'
+   */
+  function Hook(name) {
+    this.name = name;
+    this.callbacks = [];
+
+    return this;
+  }
+
+  Hook.prototype = {
+    /**
+     * Attach function
+     * @param {Function} func - callback to execute
+     */
+    add: function(func) {
+      this.callbacks.push(func);
+    },
+
+    /**
+     * Remove function
+     * @param  {Function} func - callback to remove
+     */
+    remove: function(func) {
+      var idx = this.callbacks.indexOf(func);
+
+      this.callbacks.splice(idx, 1);
+    },
+
+    /**
+     * Fire all associated callbacks
+     */
+    fire: function() {
+      for(var i = 0; i < this.callbacks.length; i++) {
+        this.callbacks[i]();
+      }
+    }
+  };
+
+  /**
    * Holder for responsive breakpoints, set on load and reset on resize
+   * @private
    * @property {Boolean} small - Window width is less than 768
    * @property {Boolean} small_up - Window width is greater than 767
    * @property {Boolean} medium_portrait - Window width is between 767 and 960
@@ -100,42 +143,18 @@
   }
 
   /**
-   * Attach hooks on child objects to the listener arrays
-   * @private
-   * @param {String} listener - Such as 'resize' or 'load'
-   * @param {Object} jsHolder - The main JavaScript object being queried; adds functionality for DOM callbacks to all children
-   * @see {@link FCH.init}
-   */
-  function attachChildListeners(listener, jsHolder) {
-    var kids = Object.keys(jsHolder);
-
-    // Go through all child objects on the holder
-    for(var i = 0; i < kids.length; i++) {
-      var kid = kids[i];
-      var child = jsHolder[kid];
-
-      if( child.hasOwnProperty(listener) ) {
-        var child_func = child[listener];
-
-        child_func.prototype = child;
-        this[listener].push( child_func );
-      }
-    }
-  }
-
-  /**
    * Fire events more efficiently
    * @private
    * @param {String} type - Listener function to trump
    * @param {String} name - New name for listener
-   * @param {Object} obj - Object to bind/watch (defaults to window)
+   * @param {Object} [obj=window] - Object to bind/watch (defaults to window)
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/Events/scroll}
    */
   function throttle(type, name, obj) {
     obj = obj || window;
     var running = false;
 
-    var func = function() {
+    function func() {
       if (running) {
         return;
       }
@@ -150,15 +169,23 @@
   }
 
   /**
-   * Execute listeners using the bundled arrays
+   * Increase screen performance and frames per second by diasbling pointer events on scroll
    * @private
-   * @param {String} listener - What to hear for, i.e. scroll, resize
+   * @see {@link http://www.thecssninja.com/css/pointer-events-60fps}
+   * @return {Function}
    */
-  function callListener(listener) {
-    var listener_array = this[listener];
+  function mobileFPS(){
+    var scroll_timer;
+    var body_classlist = document.body.classList;
 
-    for(var x = 0; x < listener_array.length; x++) {
-      listener_array[x].call( listener_array[x].prototype );
+    function allowHover() {
+      return body_classlist.remove( 'u-disable_hover' );
+    }
+
+    return function() {
+      clearTimeout(scroll_timer);
+      body_classlist.contains( 'u-disable_hover' ) || body_classlist.add( 'u-disable_hover' );
+      scroll_timer = setTimeout(allowHover, 500 );
     }
   }
 
@@ -168,7 +195,6 @@
    */
   function attachListeners() {
     var listener = 'optimized';
-    var _this = this;
 
     // Optimized fires a more effective listener but the method isn't supported in all browsers
     if(typeof CustomEvent === 'function') {
@@ -178,62 +204,22 @@
       listener = '';
     }
 
-    window.addEventListener(listener + 'scroll', function() {
-      callListener.call(_this, 'scroll');
-    });
-    window.addEventListener(listener + 'resize', function() {
-      callListener.call(_this, 'resize');
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-      callListener.call(_this, 'ready');
-    });
-    window.addEventListener('load', function() {
-      callListener.call(_this, 'load');
-    });
-  }
-
-  /**
-   * @private
-   * @see {@link FrobCoreHelpers#hasClass documentation in the public `hasClass` function}
-   */
-  function hasClass(el, cls) {
-    return !!el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-  }
-
-  /**
-   * @private
-   * @see {@link FrobCoreHelpers#addClass documentation in the public `addClass` function}
-   */
-  function addClass(el, cls) {
-    if (!hasClass(el, cls)) {
-      var clsToAdd = !!el.className ? ' ' + cls : cls;
-      el.className = el.className.trim();
-      el.className += clsToAdd;
-    }
-  }
-
-  /**
-   * @private
-   * @see {@link FrobCoreHelpers#removeClass documentation in the public `removeClass` function}
-   */
-  function removeClass(el, cls) {
-    if (hasClass(el, cls)) {
-      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-      el.className = el.className.replace(reg, ' ').trim();
-    }
+    window.addEventListener(listener + 'scroll', this.scroll.fire);
+    window.addEventListener(listener + 'resize', this.resize.fire);
+    document.addEventListener('DOMContentLoaded', this.ready.fire);
+    window.addEventListener('load', this.load.fire);
   }
 
   /**
    * Start everything up
    * @class
-   * @param {Object} jsHolder - The main JavaScript object being queried; adds functionality for DOM callbacks to all children
    * @param {Object} [options={}] - Custom options
    *   @property {Boolean} [mobile_fps=true] - Attach the scroll listener for `u-disable-hover`
+   *   @property {Boolean} [preserve_breakpoints=true] - Merge custom breakpoints with default breakpoints
    *   @property {Function} [breakpoints=null] - To set custom breakpoint, pass a function with two args and return a `string: boolean` object
    *     @property {Integer} ww - Window width
    *     @property {Integer} wh - Window height
    *     @return {Object} - key is identifier, i.e. small; value is a comparison, i.e. ww < 767
-   *   @property {Boolean} [preserve_breakpoints=true] - Merge custom breakpoints with default breakpoints
    * @example
    * var FC = {
    *   ui: {
@@ -243,7 +229,7 @@
    * new FrobCoreHelpers(FC);
    * @return {FrobCoreHelpers}
    */
-  function FrobCoreHelpers(jsHolder, options) {
+  function FrobCoreHelpers(options) {
     options = this.setDefault(options, {});
 
     var dimensionsBreakpointsListener = this.screenSizes();
@@ -251,20 +237,10 @@
     /** @type {Object} */
     this.options = applyDefaults(options);
 
-    /* Listener Arrays */
-    /** @type {Array.<function>} */
-    this.resize = [];
-    /** @type {Array.<function>} */
-    this.scroll = [];
-    /** @type {Array.<function>} */
-    this.ready = [];
-    /** @type {Array.<function>} */
-    this.load = [];
-
-    // IE detection
-    this.IE10 = this.isIE(10);
-    this.IE9 = this.isIE(9);
-    this.anyIE = (this.IE10 || this.IE9);
+    this.scroll = new Hook('scroll');
+    this.resize = new Hook('resize');
+    this.ready = new Hook('ready');
+    this.load = new Hook('load');
 
     // If we're merging the breakpoints, ensure breakpoints option object exists
     if(this.options.preserve_breakpoints && this.options.breakpoints) {
@@ -280,13 +256,13 @@
 
     // Init this.dimensions and this.bp
     dimensionsBreakpointsListener();
-    this.resize.push( dimensionsBreakpointsListener );
+    this.resize.add( dimensionsBreakpointsListener );
 
     if(this.options.mobile_fps) {
-      this.scroll.push( this.mobileFPS() );
+      this.scroll.add( mobileFPS );
     }
 
-    /* Cached jQuery variables */
+    // Cached jQuery variables
     if(typeof jQuery !== 'undefined') {
       /** @type {jQuery} */
       this.$body = jQuery('body');
@@ -294,12 +270,6 @@
       this.$window = jQuery(window);
       /** @type {jQuery} */
       this.$document = jQuery(document);
-    }
-
-    var listeners = ['resize', 'scroll', 'ready', 'load'];
-    for(var i = 0; i < listeners.length; i++) {
-      var listener = listeners[i];
-      attachChildListeners.call(this, listener, jsHolder);
     }
 
     attachListeners.call(this);
@@ -404,16 +374,6 @@
     },
 
     /**
-     * Check if IE is current browser
-     * @param {Number|String} version
-     * @return {Boolean}
-     */
-    isIE: function(version) {
-      var regex = new RegExp('msie' + (!isNaN(version)?('\\s' + version) : ''), 'i');
-      return regex.test(navigator.userAgent);
-    },
-
-    /**
      * Check for existence of element on page
      * @param {String} query - JavaScript object
      * @return {Boolean}
@@ -460,51 +420,6 @@
     },
 
     /**
-     * Determine if element has class with vanilla JS
-     * @param {Object} el - JavaScript element
-     * @param {String} cls - Class name
-     * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
-     * @return {Boolean}
-     */
-    hasClass: function(el, cls) {
-      return hasClass(el, cls);
-    },
-
-    /**
-     * Add class to element with vanilla JS
-     * @param {Object} el - JavaScript element
-     * @param {String} cls - Class name
-     * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
-     */
-    addClass: function(el, cls) {
-      return addClass(el, cls);
-    },
-
-    /**
-     * Remove class from element with vanilla JS
-     * @param {Object} el - JavaScript element
-     * @param {String} cls - Class name
-     * @see {@link http://jaketrent.com/post/addremove-classes-raw-javascript/}
-     */
-    removeClass: function(el, cls) {
-      return removeClass(el, cls)
-    },
-
-    /**
-     * Toggles class on element with vanilla JS
-     * @param {Object} el - JavaScript element
-     * @param {String} cls - Class name
-     * @see {@link http://youmightnotneedjquery.com/#toggle_class}
-     */
-    toggleClass: function(el, cls) {
-      if ( this.hasClass(el, cls) ) {
-        this.removeClass(el, cls);
-      } else {
-        this.addClass(el, cls);
-      }
-    },
-
-    /**
      * Goes through all elements and performs function for each item
      * @private
      * @param {Array|String} selector - Array, NodeList or DOM selector
@@ -524,25 +439,6 @@
       for(var i = 0; i < items.length; i++) {
         callback( items[i], i );
       }
-    },
-
-    /**
-     * Increase screen performance and frames per second by diasbling pointer events on scroll
-     * @see {@link http://www.thecssninja.com/css/pointer-events-60fps}
-     */
-    mobileFPS: function(){
-      var scroll_timer;
-      var body = document.getElementsByTagName('body')[0];
-
-      function allowHover() {
-        return removeClass(body, 'u-disable_hover');
-      }
-
-      return function() {
-        clearTimeout(scroll_timer),
-        hasClass(body, 'u-disable_hover') || addClass(body, 'u-disable_hover'),
-        scroll_timer = setTimeout(allowHover, 500 );
-      };
     },
 
     /**

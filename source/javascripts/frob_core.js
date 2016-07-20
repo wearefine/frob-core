@@ -1,3 +1,0 @@
-/*globals FCH */
-
-var FC = {};

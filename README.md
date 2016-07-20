@@ -246,16 +246,6 @@ Check to see if an element exists on the page
 FCH.exists('.henry') // => true
 ```
 
-### IE
-
-Test for IE versions. Returns boolean. **Only use in the most trying of times. Agent strings are unreliable.**
-
-| Accessor | Description |
-|---|---|
-| `FCH.IE10` | true if browser is IE10 |
-| `FCH.IE9` | true if browser is IE9 |
-| `FCH.anyIE` | true if browser is Internet Explorer |
-
 ## SCSS
 
 1. Copy `source/stylesheets` to your project (usually replacing `app/assets/stylesheets`)
