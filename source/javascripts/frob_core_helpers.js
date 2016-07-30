@@ -37,9 +37,15 @@
     /**
      * Attach function
      * @param {Function} func - callback to execute
+     * @param {Boolean} [fire_immediately=false] - fire the function after adding it to the callbacks
      */
-    add: function(func) {
+    add: function(func, fire_immediately) {
+      fire_immediately = fire_immediately || false;
       this.callbacks.push(func);
+
+      if(fire_immediately) {
+        func();
+      }
     },
 
     /**
@@ -84,7 +90,7 @@
     };
   }
 
-    /**
+  /**
    * Set a callback that merges the default and original breakpoint listeners
    * @protected
    * @param  {Integer} ww - Window width as called back in this.screenSizes
@@ -146,6 +152,7 @@
    */
   function attachListeners() {
     var listener = 'optimized';
+    var _this = this;
 
     // Optimized fires a more effective listener but the method isn't supported in all browsers
     if(typeof CustomEvent === 'function') {
@@ -155,10 +162,18 @@
       listener = '';
     }
 
-    window.addEventListener(listener + 'scroll', this.scroll.fire);
-    window.addEventListener(listener + 'resize', this.resize.fire);
-    document.addEventListener('DOMContentLoaded', this.ready.fire);
-    window.addEventListener('load', this.load.fire);
+    window.addEventListener(listener + 'scroll', function() {
+      _this.scroll.fire();
+    });
+    window.addEventListener(listener + 'resize', function() {
+      _this.resize.fire();
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      _this.ready.fire();
+    });
+    window.addEventListener('load', function() {
+      _this.load.fire();
+    });
   }
 
   /**
@@ -171,7 +186,7 @@
     load: new Hook('load'),
     breakpoints: defaultBreakpoints,
 
-    /*
+    /**
      * @property {Function} breakpoints - To set custom breakpoint, pass a function with two args and return a `string: boolean` object
      *   @property {Integer} ww - Window width
      *   @property {Integer} wh - Window height
@@ -183,7 +198,10 @@
       override_breakpoints = override_breakpoints || false;
 
       // If we're merging the breakpoints, ensure breakpoints option object exists
-      if(!override_breakpoints && breakpoints) {
+      if(override_breakpoints) {
+        this.breakpoints = breakpoints;
+
+      } else {
         custom_breakpoints = breakpoints;
 
         // Set the callback
@@ -395,11 +413,11 @@
     blankit: function() {
       var links = document.getElementsByTagName('a');
 
-      for (var i = 0; i < links.length; i++) {
-        if ( /^http/.test(links[i].getAttribute('href')) ) {
-          links[i].setAttribute('target', '_blank');
+      this.loop('a', function(link) {
+        if ( /^http/.test(link.getAttribute('href')) ) {
+          link.setAttribute('target', '_blank');
         }
-      }
+      });
     }
   };
 

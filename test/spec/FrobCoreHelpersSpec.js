@@ -1,37 +1,5 @@
 describe('FCH', function() {
-  var FCH;
   var FC = {};
-
-  beforeEach(function() {
-    FCH = new FrobCoreHelpers(FC);
-  });
-
-  afterEach(function() {
-    FCH = null;
-  });
-
-  describe('initialization', function() {
-    describe('options', function() {
-      it('should have all the defaults set when nothing is passed', function() {
-        expect(FCH.options).toBeDefined();
-        expect(FCH.options.mobile_fps).toBeDefined();
-        expect(FCH.options.breakpoints).toBeDefined();
-        expect(FCH.options.preserve_breakpoints).toBeDefined();
-      });
-
-      it('should set default properties', function() {
-        expect(FCH.options.preserve_breakpoints).toBe(true);
-      });
-
-      it('should have properties set if partial properties are defined', function() {
-        FCH = new FrobCoreHelpers(FC, {mobile_fps: false});
-
-        expect(FCH.options.mobile_fps).toBe(false);
-        expect(FCH.options.breakpoints).toBeDefined();
-        expect(FCH.options.preserve_breakpoints).toBeDefined();
-      });
-    });
-  });
 
   describe('.setDefault()', function() {
 
@@ -68,121 +36,6 @@ describe('FCH', function() {
       expect(elExists).toBe(true);
     });
 
-  });
-
-  describe('.hasClass()', function() {
-
-    it('should return false when element does not have class', function() {
-      var el = document.createElement('div');
-      var elClass = FCH.hasClass(el, 'squeaker');
-
-      expect(elClass).toBe(false);
-    });
-
-    it('should return false when element does have class', function() {
-      var el = document.createElement('div');
-      el.className = 'squeaker';
-      var elClass = FCH.hasClass(el, 'squeaker');
-
-      expect(elClass).toBe(true);
-    });
-
-  });
-
-  describe('.removeClass()', function() {
-
-    it('should do nothing if element does not have class', function() {
-      var el = document.createElement('div');
-      FCH.removeClass(el, 'squeaker');
-
-      expect(el.className).toEqual('');
-    });
-
-    it('should remove class', function() {
-      var el = document.createElement('div');
-      el.className = 'squeaker';
-      FCH.removeClass(el, 'squeaker');
-
-      expect(el.className).not.toContain('squeaker');
-    });
-
-    it('should keep other class names when removing class and trim ending whitespace', function() {
-      var el = document.createElement('div');
-      el.className = 'foo bar';
-      FCH.removeClass(el, 'bar');
-
-      expect(el.className).toEqual('foo');
-    });
-
-  });
-
-  describe('.addClass()', function() {
-
-    it('should do nothing if element already has class', function() {
-      var el = document.createElement('div');
-      el.className = 'squeaker';
-      FCH.addClass(el, 'squeaker');
-
-      expect(el.className).toEqual('squeaker');
-    });
-
-    it('should trim existing whitespace in the class', function() {
-      var el = document.createElement('div');
-      el.className = '    shelf-toys'
-      FCH.addClass(el, 'squeaker');
-
-      expect(el.className).toEqual('shelf-toys squeaker');
-    });
-
-    it('should not interfere with existing classes', function() {
-      var el = document.createElement('div');
-      el.className = 'shelf-toys';
-      FCH.addClass(el, 'squeaker');
-
-      expect(el.className).toEqual('shelf-toys squeaker');
-    });
-
-
-    it('should add the new class', function() {
-      var el = document.createElement('div');
-      FCH.addClass(el, 'squeaker');
-
-      expect(el.className).toEqual('squeaker');
-    });
-
-  });
-
-  describe('.toggleClass()', function() {
-    it('should remove class if element already has class', function() {
-      var el = document.createElement('div');
-      el.className = 'foo';
-      FCH.toggleClass(el, 'foo');
-
-      expect(el.className).toEqual('');
-    });
-
-    it('should add class if element does not have class', function() {
-      var el = document.createElement('div');
-      FCH.toggleClass(el, 'foo');
-
-      expect(el.className).toEqual('foo');
-    });
-
-    it('should keep other class names when adding a class', function() {
-      var el = document.createElement('div');
-      el.className = 'foo bar';
-      FCH.toggleClass(el, 'baz');
-
-      expect(el.className).toEqual('foo bar baz');
-    });
-
-    it('should keep other class names when removing a class', function() {
-      var el = document.createElement('div');
-      el.className = 'foo bar baz';
-      FCH.toggleClass(el, 'baz');
-
-      expect(el.className).toEqual('foo bar');
-    });
   });
 
   describe('localStorage adapter', function() {
@@ -245,8 +98,8 @@ describe('FCH', function() {
       var selector1 = document.createElement('div');
       var selector2 = document.createElement('div');
 
-      FCH.addClass(selector1, 'marker');
-      FCH.addClass(selector2, 'marker');
+      selector1.classList.add('marker');
+      selector2.classList.add('marker');
 
       document.body.innerHTML += selector1.outerHTML + selector2.outerHTML;
       var iterations = 0;
@@ -269,6 +122,83 @@ describe('FCH', function() {
     });
   });
 
+  describe('Hook', function() {
+    var int = 0;
+
+    function increment() {
+      int++;
+    }
+
+    describe('.add()', function() {
+
+      it('should add a function to the callbacks', function() {
+        int = 0;
+
+        expect(int).toEqual(0);
+        expect( FCH.ready.callbacks.length ).toEqual(0);
+
+        FCH.ready.add( increment );
+        expect( FCH.ready.callbacks.length ).toEqual(1);
+
+        FCH.ready.remove( increment );
+      });
+
+      it('should execute the function when fire_immediately is true', function() {
+        int = 0;
+
+        expect(int).toEqual(0);
+
+        FCH.ready.add( increment, true );
+        expect( FCH.ready.callbacks.length ).toEqual(1);
+
+        expect(int).toEqual(1);
+
+        FCH.ready.remove( increment );
+      });
+    });
+
+    describe('.remove()', function() {
+      it('should remove the function from the callbacks', function() {
+        expect( FCH.ready.callbacks.length ).toEqual(0);
+
+        FCH.ready.add( increment );
+        expect( FCH.ready.callbacks.length ).toEqual(1);
+
+        FCH.ready.remove( increment );
+        expect( FCH.ready.callbacks.length ).toEqual(0);
+      });
+    });
+  });
+
+  describe('.setBreakpoints()', function() {
+    it('should include default breakpoints and custom breakpoints if override_breakpoints is false', function() {
+      FCH.setBreakpoints(function(ww) {
+          return {
+            boot_size: ww < 12
+          };
+        },
+        false
+      );
+
+      expect(FCH.bp.small).toBeDefined();
+      expect(FCH.bp.boot_size).toBeDefined();
+      expect(typeof FCH.bp.boot_size).toMatch('boolean');
+    });
+
+    // it('should override default default breakpoints with custom breakpoints if override_breakpoints is true', function() {
+    //   FCH.setBreakpoints(function(ww) {
+    //       return {
+    //         boot_size: ww < 12
+    //       };
+    //     },
+    //     true
+    //   );
+
+    //   expect(FCH.bp.small).not.toBeDefined();
+    //   expect(FCH.bp.boot_size).toBeDefined();
+    // });
+  });
+
   describe('.bp', function() {
     it('should have default breakpoints if no options are passed', function() {
       // jasmine.any(Boolean) isn't applicable here
@@ -279,48 +209,9 @@ describe('FCH', function() {
       expect(typeof FCH.bp.large_down).toMatch('boolean');
       expect(typeof FCH.bp.large).toMatch('boolean');
     });
-
-    it('should include default breakpoints and custom breakpoints if preserve_breakpoints is true', function() {
-      FCH = new FrobCoreHelpers({}, {
-        breakpoints: function(ww) {
-          return {
-            boot_size: ww < 12
-          };
-        },
-        preserve_breakpoints: true
-      });
-
-      expect(FCH.bp.small).toBeDefined();
-      expect(FCH.bp.boot_size).toBeDefined();
-      expect(typeof FCH.bp.boot_size).toMatch('boolean');
-    });
-
-    it('should override default default breakpoints with custom breakpoints if preserve_breakpoints is false', function() {
-      FCH = new FrobCoreHelpers({}, {
-        breakpoints: function(ww) {
-          return {
-            boot_size: ww < 12
-          };
-        },
-        preserve_breakpoints: false
-      });
-
-      expect(FCH.bp.small).not.toBeDefined();
-      expect(FCH.bp.boot_size).toBeDefined();
-    });
   });
 
-  // describe('.mobileFPS()', function() {
-
-  //   it('should add class when scroll is triggered', function() {
-  //     window.scroll(0, 1);
-
-  //     expect(document.body.className).toEqual(' u-disable_hover');
-  //   });
-
-  // });
-
-  describe('.blankit', function() {
+  describe('.blankit()', function() {
     it('should add a target="_blank" attribute to all external links', function() {
       var el1 = document.createElement('a'),
           el2 = document.createElement('a'),

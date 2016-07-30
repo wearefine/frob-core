@@ -10,29 +10,12 @@ P.S. The inline code documentation in this pup is rock solid.
 
 1. Copy `source/javascripts/frob_core_helpers.js` and `source/javascripts/frob_core.js` to your project.
 1. Apply the structure of `source/javascripts/application.js` to your project.
-1. Start Frob Core (usually in `application.js`): `;(function() { window.FCH = new FrobCoreHelpers(FC); })();`
 
 ### Initialization and Options
 
-The core holder must be passed in as the first argument for initialization, i.e. `new FrobCoreHelpers(FC)`, but all other options are, fittingly, optional. These are passed in via object as the second argument, i.e. `new FrobCoreHelpers(FC, { ... })`.
-
-| Option | Type | Default | Description
-|---|---|---|---|
-| `mobile_fps` | boolean | true | Attach the scroll listener for `u-disable-hover` |
-| `breakpoints` | function | null | To set custom breakpoint, pass a function with two args and return a `string: boolean` object (example below) |
-| `preserve_breakpoints` | boolean | true | Merge custom breakpoints with [default breakpoints](#breakpoints). If false, value of `breakpoints` removes all default breakpoints |
+In v2, a core holder is unnecessary. Just make some IIFE and hang loose.
 
 ```javascript
-window.FCH = new FrobCoreHelpers({}, {
-  breakpoints: function(ww) {
-    return {
-      boot_size: ww < 12
-    };
-  },
-  preserve_breakpoints: false
-});
-
-// FCH.bp => { boot_size: <true|false> }
 ```
 
 ### Hooks
@@ -138,6 +121,25 @@ if(FCH.bp.small) {
 }
 ```
 
+#### `.setBreakpoints()`
+
+| Argument | Description |
+|---|---|
+| `breakpoints` | Function with boolean values to add to `FCH.bp` |
+| `override_breakpoints` | if `FCH.bp` should be completely replaced with this function (leave blank to merge with defaults `FCH.bp` values) |
+
+```javascript
+FCH.setBreakpoints(function(ww) {
+    return {
+      boot_size: ww < 12
+    }
+  },
+  false
+});
+
+// FCH.bp => { boot_size: <true|false> }
+```
+
 ### Dimensions
 
 Available from `FCH.dimensions`
@@ -164,50 +166,6 @@ Add default values for missing values in functions, similar to Ruby's `variable 
 function(required_value, missing_value) {
   missing_value = FCH.setDefault(missing_value, 10);
 }
-```
-
-### addClass
-
-`addClass` adds a class to an element with vanilla JS.
-
-| Param | Description |
-|---|---|
-| `element` | JS Object |
-| `class` | String of class to be added |
-
-```javascript
-var el = document.createElement('div');
-FCH.addClass(el, 'foo'); // el.className is now "foo"
-```
-
-### removeClass
-
-`removeClass` removes a class to an element with vanilla JS if the element already has that class.
-
-| Param | Description |
-|---|---|
-| `element` | JS Object |
-| `class` | String of class to be removed |
-
-```javascript
-var el = document.createElement('div');
-el.className = 'foo';
-FCH.removeClass(el, 'foo'); // el.className is now ""
-```
-
-### toggleClass
-
-`toggleClass` adds a class to an element with vanilla JS if the element does not already have the class, removes the class if it does.
-
-| Param | Description |
-|---|---|
-| `element` | JS Object |
-| `class` | String of class to be toggled |
-
-```javascript
-var el = document.createElement('div');
-FCH.toggleClass(el, 'foo'); // el.className is now "foo"
-FCH.toggleClass(el, 'foo'); // el.className is now ""
 ```
 
 ### Loops
@@ -337,7 +295,7 @@ Put a block of content within a media breakpoint using the `$breakpoints` list d
 }
 ```
 
-To use a custom set of breakpoints, pass the list in the second argument (default is `$breakpoints`). 
+To use a custom set of breakpoints, pass the list in the second argument (default is `$breakpoints`).
 
 ```scss
 $tweakpoints: (
