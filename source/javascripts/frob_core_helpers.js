@@ -12,19 +12,13 @@
   } else if (typeof exports === 'object') {
     module.exports = factory(window);
   } else {
-    window.FrobCoreHelpers = factory(window);
+    window.FCH = factory(window);
   }
 
 })(window, function factory(window) {
   'use strict';
 
   var custom_breakpoints;
-
-  var defaults = {
-    mobile_fps: true,
-    breakpoints: null,
-    preserve_breakpoints: true
-  };
 
   /**
    * Generate a callback holder
@@ -121,28 +115,6 @@
   }
 
   /**
-   * Combine default options with custom ones
-   * @private
-   * @param  {Object} options - Key/value object to override `defaults` object
-   * @return {Object}
-   */
-  function applyDefaults(options) {
-    var default_keys = Object.keys(defaults);
-
-    // Loop through default params
-    for(var i = 0; i < default_keys.length; i++) {
-      var key = default_keys[i];
-
-      // If options does not have the default key, apply it
-      if(!options.hasOwnProperty(key)) {
-        options[key] = defaults[key];
-      }
-    }
-
-    return options;
-  }
-
-  /**
    * Fire events more efficiently
    * @private
    * @param {String} type - Listener function to trump
@@ -169,27 +141,6 @@
   }
 
   /**
-   * Increase screen performance and frames per second by diasbling pointer events on scroll
-   * @private
-   * @see {@link http://www.thecssninja.com/css/pointer-events-60fps}
-   * @return {Function}
-   */
-  function mobileFPS(){
-    var scroll_timer;
-    var body_classlist = document.body.classList;
-
-    function allowHover() {
-      return body_classlist.remove( 'u-disable_hover' );
-    }
-
-    return function() {
-      clearTimeout(scroll_timer);
-      body_classlist.contains( 'u-disable_hover' ) || body_classlist.add( 'u-disable_hover' );
-      scroll_timer = setTimeout(allowHover, 500 );
-    }
-  }
-
-  /**
    * Actually bind the listeners to objects
    * @private
    */
@@ -212,72 +163,39 @@
 
   /**
    * Start everything up
-   * @class
-   * @param {Object} [options={}] - Custom options
-   *   @property {Boolean} [mobile_fps=true] - Attach the scroll listener for `u-disable-hover`
-   *   @property {Boolean} [preserve_breakpoints=true] - Merge custom breakpoints with default breakpoints
-   *   @property {Function} [breakpoints=null] - To set custom breakpoint, pass a function with two args and return a `string: boolean` object
-   *     @property {Integer} ww - Window width
-   *     @property {Integer} wh - Window height
-   *     @return {Object} - key is identifier, i.e. small; value is a comparison, i.e. ww < 767
-   * @example
-   * var FC = {
-   *   ui: {
-   *     resize: function() { ... }
-   *   }
-   * }
-   * new FrobCoreHelpers(FC);
-   * @return {FrobCoreHelpers}
    */
-  function FrobCoreHelpers(options) {
-    options = this.setDefault(options, {});
+  var FrobCoreHelpers = {
+    scroll: new Hook('scroll'),
+    resize: new Hook('resize'),
+    ready: new Hook('ready'),
+    load: new Hook('load'),
+    breakpoints: defaultBreakpoints,
 
-    var dimensionsBreakpointsListener = this.screenSizes();
+    /*
+     * @property {Function} breakpoints - To set custom breakpoint, pass a function with two args and return a `string: boolean` object
+     *   @property {Integer} ww - Window width
+     *   @property {Integer} wh - Window height
+     *   @return {Object} - key is identifier, i.e. small; value is a comparison, i.e. ww < 767
+     * @property {Boolean} [override_breakpoints=false] - Replace custom breakpoints with default breakpoints
+     */
+    setBreakpoints: function(breakpoints, override_breakpoints) {
+      var dimensionsBreakpointsListener = this.screenSizes();
+      override_breakpoints = override_breakpoints || false;
 
-    /** @type {Object} */
-    this.options = applyDefaults(options);
+      // If we're merging the breakpoints, ensure breakpoints option object exists
+      if(!override_breakpoints && breakpoints) {
+        custom_breakpoints = breakpoints;
 
-    this.scroll = new Hook('scroll');
-    this.resize = new Hook('resize');
-    this.ready = new Hook('ready');
-    this.load = new Hook('load');
+        // Set the callback
+        this.breakpoints = mergeBreakpoints;
+      }
 
-    // If we're merging the breakpoints, ensure breakpoints option object exists
-    if(this.options.preserve_breakpoints && this.options.breakpoints) {
-      custom_breakpoints = this.options.breakpoints;
+      // Init this.dimensions and this.bp
+      dimensionsBreakpointsListener();
+      this.resize.add( dimensionsBreakpointsListener );
 
-      // Set the callback
-      this.breakpoints = mergeBreakpoints;
-    } else {
-
-      // Fallback to the override or the default breakpoints
-      this.breakpoints =  this.options.breakpoints || defaultBreakpoints;
-    }
-
-    // Init this.dimensions and this.bp
-    dimensionsBreakpointsListener();
-    this.resize.add( dimensionsBreakpointsListener );
-
-    if(this.options.mobile_fps) {
-      this.scroll.add( mobileFPS );
-    }
-
-    // Cached jQuery variables
-    if(typeof jQuery !== 'undefined') {
-      /** @type {jQuery} */
-      this.$body = jQuery('body');
-      /** @type {jQuery} */
-      this.$window = jQuery(window);
-      /** @type {jQuery} */
-      this.$document = jQuery(document);
-    }
-
-    attachListeners.call(this);
-
-    return this;
-  }
-
-  FrobCoreHelpers.prototype = {
+      return this;
+    },
 
     /**
      * Apply value to variable if it has none
@@ -484,6 +402,18 @@
       }
     }
   };
+
+  // Cached jQuery variables
+  if(typeof jQuery !== 'undefined') {
+    /** @type {jQuery} */
+    FrobCoreHelpers.$body = jQuery('body');
+    /** @type {jQuery} */
+    FrobCoreHelpers.$window = jQuery(window);
+    /** @type {jQuery} */
+    FrobCoreHelpers.$document = jQuery(document);
+  }
+
+  attachListeners.call(FrobCoreHelpers);
 
   return FrobCoreHelpers;
 });
