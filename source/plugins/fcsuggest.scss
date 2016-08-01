@@ -1,0 +1,37 @@
+.fcsuggest {
+  position: relative;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 9;
+  }
+
+  li {
+    cursor: pointer;
+  }
+}
+
+.fcsuggest-active {
+  ul {
+    display: block;
+  }
+
+  li:not(.shown) {
+    display: none;
+  }
+}
+
+.fcsuggest-suggestor {
+  z-index: -1;
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  width: 100%;
+}
