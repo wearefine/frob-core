@@ -23,7 +23,7 @@ A list of options **must be** the next sibling to the Selector (see [examples](#
 ## Examples
 
 ```html
-<input type="text" class="js-filter-input" placeholder="Please />
+<input type="text" class="js-filter-input" placeholder="Type here" />
 <ul>
   <li data-loc="nemo.html">Nemo</li>
   <li data-loc="marlin.html">Marlin</li>
