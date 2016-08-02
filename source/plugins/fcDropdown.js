@@ -17,7 +17,7 @@
 
   var defaults = {
     activeClass: 'active',
-    listSelector: 'a',
+    listSelector: 'li',
     // All callbacks scoped to the selector element
     onOpen: function() {},
     /**
@@ -74,6 +74,11 @@
    * Initialize dropdown
    * @param {String} selector - DOM selector
    * @param {Object} [settings={}] - hash of options
+   *   @property {String} [activeClass=active] - class applied to list item once selection is made
+   *   @property {String} [listSelector=li] - node selector to search for in list
+   *   @property {Function} [onOpen=noop] - callback once menu is opened
+   *   @property {Function} [onSelect=noop] - callback once selection is made; first argument is the selected list item as a Node
+   *   @property {Function} [onClose=noop] - callback once menu is closed
    * @returns {fcDropdown}
    */
   return function(selector, settings) {

@@ -18,10 +18,6 @@
     displayClass: 'shown',
     activeClass: 'active',
     listSelector: 'li',
-    /**
-     * @param {Node} el - select menu
-     * @param {Node} selected - select item
-     */
     onSelect: function() {},
   };
 
@@ -54,10 +50,10 @@
    * @class  fcSuggest
    * @param  {Node} selector - input field for search
    * @param  {Object} options - key/value object to override `defaults` object
-   *   @property {String} [displayClass=shown] - class to be applied to list items that match searched criteria
-   *   @property {String} [activeClass=active] - class to be applied to first item or selected list item
+   *   @property {String} [displayClass=shown] - class applied to list items that match searched criteria
+   *   @property {String} [activeClass=active] - class applied to first item or selected list item
    *   @property {String} [listSelector=li] - selector to search for that contains queryable items
-   *   @property {Function} [onSelect=noop] - callback for action once list item ahs been selected
+   *   @property {Function} [onSelect=noop] - callback for action once list item has been selected
    * @return {fcSuggest}
    */
   function init(selector, options) {
