@@ -1,0 +1,17 @@
+.fcdropdown-destination {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.8s;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 9;
+  top: 100%;
+  background: $c-white;
+
+  li {
+    padding: 8px 20px;
+    display: block;
+  }
+}
