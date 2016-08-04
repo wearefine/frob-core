@@ -1,1 +1,2 @@
 README.md
+source/javascripts/frob_core_helpers.js
