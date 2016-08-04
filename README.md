@@ -4,8 +4,6 @@
 
 Because you're not [hardcore](https://www.youtube.com/watch?v=f-mPnmfrm6I).
 
-P.S. The inline code documentation in this pup is rock solid.
-
 ## JavaScript
 
 1. Copy `source/javascripts/frob_core_helpers.js` and `source/javascripts/frob_core.js` to your project.
@@ -13,47 +11,23 @@ P.S. The inline code documentation in this pup is rock solid.
 
 ### Initialization and Options
 
-In v2, a core holder is unnecessary. Just make some IIFE and hang loose.
+In v2, a core holder is unnecessary. Just make some IIFEs and hang loose.
 
 ```javascript
-```
+(function() {
+  'use strict';
 
-### Hooks
-
-Direct descendants of the core holder can access hooks using reserved property names. These are called automagically, avoiding declaring multiple event listeners on the `document` or `window`.
-
-```javascript
-FC.ui = {
-  ready: {
+  function initSlider() {
     if(FCH.exists('.js-slider')) {
       this.mySuperSliderInitialization();
     }
-  },
-
-  mySuperSliderInitialization: function() {
-    ...
   }
-};
+
+  FCH.ready.add( initSlider );
+})();
 ```
 
-For example, use the `resize` function to change the width of `.mydiv` to match the window's width.
-
-```javascript
-FC._ui = {
-  resize: function() {
-    $('.mydiv').width(FCH.dimensions.ww);
-  }
-};
-```
-
-Hooks can also be added by adding a function to the appropriate `FCH` array.
-
-```javascript
-var sticky = function($el) {
-  $el.css('position', 'fixed');
-}
-FCH.scroll.push(sticky);
-```
+### Hooks
 
 | Hook | Called on |
 |---|---|
@@ -62,19 +36,20 @@ FCH.scroll.push(sticky);
 | `ready` | DOMContentLoaded |
 | `load` | window onload |
 
-**Special Note**: Using `this` in a hook function will refer to the parent namespace, not `FrobCoreHelper`.
+Hooks are events that are called automagically, avoiding declaring multiple event listeners on the `document` or `window`. 
+
+They can be easily added and removed.
 
 ```javascript
-FC._ui = {
-  boo: function() {
-    alert('BOOooooOOoooOO');
-  }
 
-  resize: function() {
-    this.boo();
-  }
+function boo() {
+  alert('BOOooooOOoooOO')
 }
+
+FCH.resize.add( boo );
 // a scary alert is triggered every time the window is resized
+FCH.resize.remove( boo );
+// you will no longer be scared
 ```
 
 #### Debounced Events
@@ -84,17 +59,9 @@ Sometimes, a callback function on rapid-firing window events can be resource-int
 Wrap your function in `FCH.debounce` when adding it to a hook.
 
 ```javascript
-FC.nav_listeners = {
-  ready: function() {
-    FCH.resize.push( FCH.debounce( this.resourceConsumingFunction.bind(this) ) );
-  },
+function resourceConsumingFunction() { ... }
 
-  resourceConsumingFunction: function() {
-    this.destroy();
-  },
-
-  destroy: function() { ... }
-};
+FCH.resize.add( FCH.debounce( resourceConsumingFunction ) );
 ```
 
 | Param | Description |
@@ -134,7 +101,7 @@ FCH.setBreakpoints(function(ww) {
       boot_size: ww < 12
     }
   },
-  false
+  true
 });
 
 // FCH.bp => { boot_size: <true|false> }

@@ -1,4 +1,4 @@
-/*globals FCH, FC */
+/*globals FCH */
 
 (function() {
   'use strict';
