@@ -48,6 +48,7 @@ function boo() {
 
 FCH.resize.add( boo );
 // a scary alert is triggered every time the window is resized
+
 FCH.resize.remove( boo );
 // you will no longer be scared
 ```
