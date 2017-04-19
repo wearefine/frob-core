@@ -8,3 +8,4 @@ env:
 after_success:
 - chmod ugo+x notify.sh
 - '[ "${TRAVIS_PULL_REQUEST}" != "false" ] || ./notify.sh'
+
